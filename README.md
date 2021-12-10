@@ -11,3 +11,10 @@ This repository contains all of the necessary infrastucture-as-code to deploy th
 - Terraform State Storage Account
 - Private DNS Zones
 - Azure Policy Definitions
+
+## Resource Group Naming Convention
+The plaform resource groups will be called the following:
+
+- platform-identity-westeurope
+- platform-connectivity-westeurope
+- platform-management-westeurope
