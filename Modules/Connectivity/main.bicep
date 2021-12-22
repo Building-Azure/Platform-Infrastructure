@@ -11,7 +11,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       {
         name: 'GatewaySubnet'
         properties: {
-          addressPrefix: '10.100.0.0/24'
+          addressPrefix: '10.100.0.0/27'
         }
       }
     ]
@@ -73,11 +73,11 @@ resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11
       }
     ]
     sku: {
-      name: 'Basic'
-      tier: 'Basic'
+      name: 'VpnGw1AZ'
+      tier: 'VpnGw1AZ'
     }
     gatewayType: 'Vpn'
-    vpnType: 'PolicyBased'
+    vpnType: 'RouteBased'
     enableBgp: true
   }
 }
