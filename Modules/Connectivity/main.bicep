@@ -31,6 +31,9 @@ resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   ]
   properties: {
    publicIPAllocationMethod: 'Static'
+   dnsSettings: {
+     domainNameLabel: 'buildingazure-gateway'
+   }
   }
 }
 
