@@ -21,6 +21,14 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: 'hub-westeurope-gateway-pip'
   location: 'westeurope'
+  sku: {
+    name: 'Standard'
+  }
+  zones: [
+   '1'
+   '2'
+   '3'
+  ]
   properties: {
    publicIPAllocationMethod: 'Static'
   }
