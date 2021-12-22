@@ -54,7 +54,7 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
   }
 }
 
-/* resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
+resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
   name: 'hub-westeurope-gateway'
   location: 'westeurope'
   properties: {
@@ -64,10 +64,10 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: 'virtualNetwork::gatewaySubnet.id'
+            id: virtualNetwork::gatewaySubnet.id
           }
           publicIPAddress: {
-            id: 'publicIP.id'
+            id: publicIP.id
           }
         }
       }
@@ -80,6 +80,6 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
     vpnType: 'PolicyBased'
     enableBgp: true
   }
-} */
+}
 
 output subnetResourceId string = virtualNetwork::gatewaySubnet.id
