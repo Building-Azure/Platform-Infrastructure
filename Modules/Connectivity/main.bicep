@@ -52,13 +52,13 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
 
 
 
-/* resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
+resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
   name: 'hub-westeurope-gateway'
   location: 'westeurope'
   properties: {
     ipConfigurations: [
       {
-        name: 'ipconf'
+        name: 'gatewayIPConfig'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
@@ -78,5 +78,5 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
     vpnType: 'PolicyBased'
     enableBgp: true
   }
-} */
+}
 
