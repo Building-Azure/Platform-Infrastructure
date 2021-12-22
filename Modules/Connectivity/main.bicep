@@ -37,6 +37,20 @@ resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   }
 }
 
+resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01' = {
+  name: 'buildingazure-hq-lgw'
+  location: 'westeurope'
+  properties: {
+    fqdn: 'buildingazure-gateway.westeurope.cloudapp.azure.com'
+    localNetworkAddressSpace: {
+      addressPrefixes: [
+        '192.168.1.0/24'
+      ]
+    }
+  }
+}
+
+
 
 /* resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
   name: 'hub-westeurope-gateway'
