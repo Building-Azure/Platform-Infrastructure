@@ -1,6 +1,8 @@
+var location = 'westeurope' 
+
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
-  name: 'hub-westeurope-virtualnetwork'
-  location: 'westeurope'
+  name: 'hub-virtualnetwork'
+  location: location
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -23,18 +25,13 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 }
 
 resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
-  name: 'hub-westeurope-gateway-pip'
-  location: 'westeurope'
+  name: 'hub-gateway-pip'
+  location: location
   sku: {
     name: 'Standard'
   }
-  zones: [
-    '1'
-    '2'
-    '3'
-  ]
   properties: {
-    publicIPAllocationMethod: 'Static'
+    publicIPAllocationMethod: 'Dynamic'
     dnsSettings: {
       domainNameLabel: 'buildingazure-gateway'
     }
@@ -43,7 +40,7 @@ resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
 
 resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01' = {
   name: 'buildingazure-hq-lgw'
-  location: 'westeurope'
+  location: location
   properties: {
     fqdn: 'buildingazure-gateway.westeurope.cloudapp.azure.com'
     localNetworkAddressSpace: {
@@ -55,8 +52,8 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
 }
 
 resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
-  name: 'hub-westeurope-gateway'
-  location: 'westeurope'
+  name: 'hub-gateway'
+  location: location
   properties: {
     ipConfigurations: [
       {
@@ -73,12 +70,12 @@ resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11
       }
     ]
     sku: {
-      name: 'VpnGw1AZ'
-      tier: 'VpnGw1AZ'
+      name: 'Basic'
+      tier: 'Basic'
     }
     gatewayType: 'Vpn'
     vpnType: 'RouteBased'
-    enableBgp: true
+    enableBgp: false
   }
 }
 
