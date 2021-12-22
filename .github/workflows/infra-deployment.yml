@@ -31,7 +31,7 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         scope: resourcegroup
-        resourceGroupName: bldazure-connectivity-production
+        resourceGroupName: bldazure-connectivity-westeurope
         region:  westeurope
         template: ./Modules/Connectivity/main.bicep
         failOnStdErr: false
