@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 name: Bicep
 jobs:
-  Connectivity:
+  Production:
     runs-on: ubuntu-latest
     steps:
 
@@ -16,10 +16,12 @@ jobs:
       # Log into Azure
     - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # Deploy Bicep file
-    - name: Build Infra
+    - name: Build Connectivity Infra
       uses: azure/arm-deploy@v1
       with:
         scope: resourcegroup
