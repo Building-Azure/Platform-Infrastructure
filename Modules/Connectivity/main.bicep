@@ -1,5 +1,5 @@
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
-  name: 'hub-westeurope'
+  name: 'hub-westeurope-virtualnetwork'
   location: 'westeurope'
   properties: {
     addressSpace: {
