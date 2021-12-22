@@ -1,0 +1,37 @@
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+name: Infrastructure Deployment
+permissions:
+      id-token: write
+      contents: read
+jobs:
+  Production:
+    name: Production
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+
+      # Checkout code
+    - uses: actions/checkout@main
+
+      # Log into Azure
+    - name: Login to Azure with OIDC
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Deploy Bicep file
+    - name: Build Connectivity Infra
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        resourceGroupName: bldazure-connectivity-westeurope
+        region:  westeurope
+        template: ./Modules/Connectivity/main.bicep
+        failOnStdErr: false
