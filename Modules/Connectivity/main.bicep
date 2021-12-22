@@ -28,7 +28,7 @@ resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: 'hub-gateway-pip'
   location: location
   sku: {
-    name: 'Standard'
+    name: 'Basic'
   }
   properties: {
     publicIPAllocationMethod: 'Dynamic'
