@@ -16,7 +16,13 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       }
     ]
   }
+//This creates a strongly typed reference so we can obtain the ID which is needed in the VNET Gateway resource
+resource gatewaySubnet 'subnets' existing = {
+  name: 'GatewaySubnet'
 }
+}
+
+
 
 resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: 'hub-westeurope-gateway-pip'
@@ -62,7 +68,7 @@ resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: 'virtualNetwork::GatewaySubnet.id'
+            id: 'virtualNetwork::gatewaySubnet.id'
           }
           publicIPAddress: {
             id: 'publicIP.id'
