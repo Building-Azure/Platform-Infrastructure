@@ -16,13 +16,11 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       }
     ]
   }
-//This creates a strongly typed reference so we can obtain the ID which is needed in the VNET Gateway resource
-resource gatewaySubnet 'subnets' existing = {
-  name: 'GatewaySubnet'
+  //This creates a strongly typed reference so we can obtain the ID which is needed in the VNET Gateway resource
+  resource gatewaySubnet 'subnets' existing = {
+    name: 'GatewaySubnet'
+  }
 }
-}
-
-
 
 resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: 'hub-westeurope-gateway-pip'
@@ -31,15 +29,15 @@ resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
     name: 'Standard'
   }
   zones: [
-   '1'
-   '2'
-   '3'
+    '1'
+    '2'
+    '3'
   ]
   properties: {
-   publicIPAllocationMethod: 'Static'
-   dnsSettings: {
-     domainNameLabel: 'buildingazure-gateway'
-   }
+    publicIPAllocationMethod: 'Static'
+    dnsSettings: {
+      domainNameLabel: 'buildingazure-gateway'
+    }
   }
 }
 
@@ -56,9 +54,7 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
   }
 }
 
-
-
-resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
+/* resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
   name: 'hub-westeurope-gateway'
   location: 'westeurope'
   properties: {
@@ -84,5 +80,6 @@ resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11
     vpnType: 'PolicyBased'
     enableBgp: true
   }
-}
+} */
 
+output subnetResourceId string = virtualNetwork::gatewaySubnet.id
