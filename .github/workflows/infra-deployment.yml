@@ -34,4 +34,5 @@ jobs:
         resourceGroupName: bldazure-connectivity-westeurope
         region:  westeurope
         template: ./Modules/Connectivity/main.bicep
+        parameters: preSharedKey=${{ secrets.PRESHARED_KEY }}
         failOnStdErr: false
