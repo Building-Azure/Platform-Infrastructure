@@ -1,3 +1,4 @@
+param preSharedKey string
 var location = 'westeurope' 
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
@@ -78,5 +79,24 @@ resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11
     enableBgp: false
   }
 }
+
+resource vpnVnetConnection 'Microsoft.Network/connections@2021-05-01' = {
+  name: 'buildingazure-hq-connection'
+  location: location
+  properties: {
+    virtualNetworkGateway1: {
+      id: virtualNetworkGateway.id
+      properties:{}
+    }
+    localNetworkGateway2: {
+      id: localNetworkGateway.id
+      properties:{}
+    }
+    connectionType: 'IPsec'
+    routingWeight: 0
+    sharedKey: preSharedKey
+  }
+}
+
 
 output subnetResourceId string = virtualNetwork::gatewaySubnet.id
