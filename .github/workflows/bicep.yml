@@ -7,6 +7,8 @@ on:
 name: Bicep
 jobs:
   Production:
+    name: Production
+    environment: Production
     runs-on: ubuntu-latest
     steps:
 
@@ -25,7 +27,7 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         scope: resourcegroup
-        resourceGroupName: bldazure-connectivity
+        resourceGroupName: bldazure-connectivity-production
         region:  westeurope
         template: ./Modules/Connectivity/main.bicep
         failOnStdErr: false
