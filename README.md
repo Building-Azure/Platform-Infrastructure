@@ -31,4 +31,5 @@ The following locations have these address ranges
 - Platform-Identity 10.100.1.0/24
 
 #### Azure North Europe
- 
+- Platform-Hub 10.101.0.0/24
+- Platform-Identity 10.101.1.0/24
