@@ -17,6 +17,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
         name: 'DomainControllerSubnet'
         properties: {
           addressPrefix: '10.100.1.0/28'
+          networkSecurityGroup: {
+            id: dcSubnetNetworkSecurityGroup.id
+          }
         }
       }
     ]
@@ -45,6 +48,30 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
     ]
   }
 }
+
+resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
+  name: 'dc-subnet-nsg'
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'allowAll'
+        properties: {
+          description: 'description'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 100
+          direction: 'Inbound'
+        }
+      }
+    ]
+  }
+}
+
 
 resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'dc01-win2022'
