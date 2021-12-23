@@ -43,6 +43,9 @@ jobs:
     environment: Production
     runs-on: ubuntu-latest
     steps:
+      
+      # Checkout code
+    - uses: actions/checkout@main
 
     # Log into Azure
     - name: Login to Azure with OIDC
