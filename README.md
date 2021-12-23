@@ -1,4 +1,4 @@
-# Platform
+# Platform-Infrastructure
 This repository contains all of the necessary infrastucture-as-code to deploy the Azure Platform resources. This will deploy resources such as:
 - Hub VNET
 - Identity VNET
