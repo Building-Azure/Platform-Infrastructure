@@ -4,13 +4,13 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
-name: Infrastructure Deployment
+name: Platform Infrastructure Deployment
 permissions:
       id-token: write
       contents: read
 jobs:
-  Production:
-    name: Production
+  Connectivity:
+    name: Connectivity
     environment: Production
     runs-on: ubuntu-latest
     steps:
@@ -27,7 +27,7 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # Deploy Bicep file
-    - name: Build Connectivity Infra
+    - name: Build Connectivity Infrastructure
       uses: azure/arm-deploy@v1
       with:
         scope: resourcegroup
@@ -35,4 +35,19 @@ jobs:
         region:  westeurope
         template: ./Modules/Connectivity/main.bicep
         parameters: preSharedKey=${{ secrets.PRESHARED_KEY }}
+        failOnStdErr: false
+  
+  Identity:
+    name: Identity
+    needs: Connectivity
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build Identity Infrastructure
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        resourceGroupName: bldazure-identity-westeurope
+        region:  westeurope
+        template: ./Modules/Identity/main.bicep
         failOnStdErr: false
