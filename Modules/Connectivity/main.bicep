@@ -99,7 +99,7 @@ resource vpnVnetConnection 'Microsoft.Network/connections@2021-05-01' = {
 }
 
 resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-07-01' = {
-  name: 'virtualNetwork/identity'
+  name: 'hub-virtualnetwork/identity'
   properties: {
     allowVirtualNetworkAccess: true
     allowForwardedTraffic: true

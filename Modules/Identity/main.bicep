@@ -187,7 +187,7 @@ resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extension
 }
 
 resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
-  name: 'virtualNetwork/hub'
+  name: 'identity-spoke-virtualnetwork/hub'
   properties: {
     allowVirtualNetworkAccess: true
     allowForwardedTraffic: true
