@@ -34,6 +34,8 @@ jobs:
         resourceGroupName: bldazure-connectivity-westeurope
         region:  westeurope
         template: ./Modules/Connectivity/main.bicep
+        deploymentMode: Complete
+        deploymentName: ${GITHUB_RUN_ID}
         parameters: preSharedKey=${{ secrets.PRESHARED_KEY }}
         failOnStdErr: false
   
@@ -61,5 +63,7 @@ jobs:
         resourceGroupName: bldazure-identity-westeurope
         region:  westeurope
         template: ./Modules/Identity/main.bicep
+        deploymentMode: Complete
+        deploymentName: ${GITHUB_RUN_ID}
         parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}}
         failOnStdErr: false
