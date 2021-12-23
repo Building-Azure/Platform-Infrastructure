@@ -43,7 +43,7 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
   name: 'buildingazure-hq-lgw'
   location: location
   properties: {
-    fqdn: 'buildingazure-gateway.westeurope.cloudapp.azure.com'
+    fqdn: 'hq.buildingazure.co.uk'
     localNetworkAddressSpace: {
       addressPrefixes: [
         '192.168.1.0/24'
