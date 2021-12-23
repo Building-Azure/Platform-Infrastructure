@@ -92,3 +92,16 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   }
 }
 
+resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: 'dc01-win2022/AzureNetworkWatcherExtension'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Azure.NetworkWatcher'
+    type: 'NetworkWatcherAgentWindows'
+    typeHandlerVersion: '1.4'
+    autoUpgradeMinorVersion: true
+    settings: {}
+  }
+}
+
+
