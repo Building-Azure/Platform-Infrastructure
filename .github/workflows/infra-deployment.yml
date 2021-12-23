@@ -35,7 +35,7 @@ jobs:
         region:  westeurope
         template: ./Modules/Connectivity/main.bicep
         deploymentMode: Complete
-        deploymentName: ${GITHUB_RUN_ID}
+        deploymentName: 'https://github.com/Building-Azure/Platform-Infrastructure/actions'
         parameters: preSharedKey=${{ secrets.PRESHARED_KEY }}
         failOnStdErr: false
   
@@ -64,6 +64,6 @@ jobs:
         region:  westeurope
         template: ./Modules/Identity/main.bicep
         deploymentMode: Complete
-        deploymentName: ${GITHUB_RUN_ID}
+        deploymentName: 'https://github.com/Building-Azure/Platform-Infrastructure/actions'
         parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}}
         failOnStdErr: false
