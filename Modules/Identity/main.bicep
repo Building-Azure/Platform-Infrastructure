@@ -36,7 +36,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
         properties: {
           privateIPAllocationMethod: 'Static'
           subnet: {
-            id: virtualNetwork::domainControllerSubnet.id          
+            id: virtualNetwork::domainControllerSubnet.id
           }
           privateIPAddress: '10.100.1.4'
         }
@@ -44,7 +44,6 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
     ]
   }
 }
-
 
 resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'dc01-win2022'
@@ -104,4 +103,28 @@ resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensi
   }
 }
 
-
+resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: 'dc01-win2022/IaaSAntimalware'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Azure.Security'
+    type: 'IaaSAntimalware'
+    typeHandlerVersion: '1.3'
+    autoUpgradeMinorVersion: true
+    settings: {
+      AntimalwareEnabled: true
+      RealtimeProtectionEnabled: true
+      ScheduledScanSettings: {
+        isEnabled: true
+        day: '7'
+        time: '120'
+        scanType: 'Quick'
+      }
+      Exclusions: {
+        Extensions: ''
+        Paths: ''
+        Processes: ''
+      }
+    }
+  }
+}
