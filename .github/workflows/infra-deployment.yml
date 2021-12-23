@@ -35,7 +35,7 @@ jobs:
         region:  westeurope
         template: ./Modules/Connectivity/main.bicep
         deploymentMode: Complete
-        deploymentName: 'Github Actions'
+        deploymentName: 'Github-Actions'
         parameters: preSharedKey=${{ secrets.PRESHARED_KEY }}
         failOnStdErr: false
   
@@ -64,6 +64,6 @@ jobs:
         region:  westeurope
         template: ./Modules/Identity/main.bicep
         deploymentMode: Complete
-        deploymentName: 'Github Actions'
+        deploymentName: 'Github-Actions'
         parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}}
         failOnStdErr: false
