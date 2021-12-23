@@ -9,8 +9,8 @@ permissions:
       id-token: write
       contents: read
 jobs:
-  Connectivity:
-    name: Connectivity
+  Hub-Network:
+    name: Hub-Network
     environment: Production
     runs-on: ubuntu-latest
     steps:
@@ -61,4 +61,5 @@ jobs:
         resourceGroupName: bldazure-identity-westeurope
         region:  westeurope
         template: ./Modules/Identity/main.bicep
+        parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}}
         failOnStdErr: false
