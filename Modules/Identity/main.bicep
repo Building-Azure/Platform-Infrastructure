@@ -1,4 +1,6 @@
 var location = 'westeurope'
+param adminUsername string
+param adminPassword string
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'identity-spoke-virtualnetwork'
@@ -23,3 +25,63 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
     name: 'DomainControllerSubnet'
   }
 }
+
+resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: 'dc01-nic'
+  location: location
+  properties: {
+    ipConfigurations: [
+      {
+        name: 'ipconf'
+        properties: {
+          privateIPAllocationMethod: 'Dynamic'
+          subnet: {
+            id: virtualNetwork::domainControllerSubnet.id
+          }
+        }
+      }
+    ]
+  }
+}
+
+
+resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
+  name: 'DC01-WIN2022'
+  location: location
+  properties: {
+    hardwareProfile: {
+      vmSize: 'Standard_B2s'
+    }
+    osProfile: {
+      computerName: 'DC01-WIN2022'
+      adminUsername: adminUsername
+      adminPassword: adminPassword
+    }
+    storageProfile: {
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter-azure-edition'
+        version: 'latest'
+      }
+      osDisk: {
+        name: 'osDisk'
+        caching: 'ReadWrite'
+        createOption: 'FromImage'
+      }
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: networkInterface.id
+        }
+      ]
+    }
+    diagnosticsProfile: {
+      bootDiagnostics: {
+        enabled: true
+      }
+    }
+  }
+}
+
