@@ -1,6 +1,7 @@
 var location = 'westeurope'
 param adminUsername string
 param adminPassword string
+param workspaceKey string
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'identity-spoke-virtualnetwork'
@@ -125,6 +126,35 @@ resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@
         Paths: ''
         Processes: ''
       }
+    }
+  }
+}
+
+resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: 'dc01-win2022/AzureMonitorWindowsAgent'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Azure.Monitor'
+    type: 'AzureMonitorWindowsAgent'
+    typeHandlerVersion: '1.0'
+    autoUpgradeMinorVersion: true
+    settings: {}
+  }
+}
+
+resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: 'dc01-win2022/Microsoft.Insights.LogAnalyticsAgent'
+  location: location
+  properties: {
+    publisher: 'Microsoft.EnterpriseCloud.Monitoring'
+    type: 'MicrosoftMonitoringAgent'
+    typeHandlerVersion: '1.0'
+    autoUpgradeMinorVersion: true
+    settings: {
+      workspaceId: 'fb0a7adb-8812-4cd9-b204-3faddd83b6bf'
+    }
+    protectedSettings: {
+      workspaceKey: workspaceKey
     }
   }
 }

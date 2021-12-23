@@ -65,5 +65,5 @@ jobs:
         template: ./Modules/Identity/main.bicep
         deploymentMode: Complete
         deploymentName: 'Github-Actions'
-        parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}}
+        parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}} workspaceKey=${{ secrets.LOGANALYTICS_WORKSPACE_KEY}}
         failOnStdErr: false
