@@ -98,5 +98,17 @@ resource vpnVnetConnection 'Microsoft.Network/connections@2021-05-01' = {
   }
 }
 
+resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-07-01' = {
+  name: 'virtualNetwork/identity'
+  properties: {
+    allowVirtualNetworkAccess: true
+    allowForwardedTraffic: true
+    allowGatewayTransit: true
+    useRemoteGateways: false
+    remoteVirtualNetwork: {
+      id: '/subscriptions/a8d89de8-d014-4deb-81f8-cecb19fbe41d/resourceGroups/bldazure-identity-westeurope/providers/Microsoft.Network/virtualNetworks/identity-spoke-virtualnetwork'
+    }
+  }
+}
 
 output subnetResourceId string = virtualNetwork::gatewaySubnet.id

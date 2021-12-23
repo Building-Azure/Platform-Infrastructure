@@ -185,3 +185,18 @@ resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extension
     }
   }
 }
+
+resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
+  name: 'virtualNetwork/hub'
+  properties: {
+    allowVirtualNetworkAccess: true
+    allowForwardedTraffic: true
+    allowGatewayTransit: true
+    useRemoteGateways: true
+    remoteVirtualNetwork: {
+      id: '/subscriptions/a8d89de8-d014-4deb-81f8-cecb19fbe41d/resourceGroups/bldazure-connectivity-westeurope/providers/Microsoft.Network/virtualNetworks/hub-virtualnetwork'
+    }
+  }
+}
+
+
