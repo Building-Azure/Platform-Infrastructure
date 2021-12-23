@@ -39,7 +39,6 @@ jobs:
   
   Identity:
     name: Identity
-    needs: Connectivity
     environment: Production
     runs-on: ubuntu-latest
     steps:

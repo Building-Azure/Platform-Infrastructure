@@ -13,7 +13,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       {
         name: 'DomainControllerSubnet'
         properties: {
-          addressPrefix: '10.100.0.0/28'
+          addressPrefix: '10.100.1.0/28'
         }
       }
     ]
