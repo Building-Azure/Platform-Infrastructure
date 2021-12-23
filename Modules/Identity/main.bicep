@@ -34,10 +34,11 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
       {
         name: 'ipconf'
         properties: {
-          privateIPAllocationMethod: 'Dynamic'
+          privateIPAllocationMethod: 'Static'
           subnet: {
-            id: virtualNetwork::domainControllerSubnet.id
+            id: virtualNetwork::domainControllerSubnet.id          
           }
+          privateIPAddress: '10.100.1.4'
         }
       }
     ]
@@ -46,9 +47,11 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 
 
 resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-  name: 'DC01-WIN2022'
+  name: 'dc01-win2022'
   location: location
   properties: {
+    licenseType: 'Windows_Server'
+
     hardwareProfile: {
       vmSize: 'Standard_B2s'
     }
@@ -56,6 +59,14 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
       computerName: 'DC01-WIN2022'
       adminUsername: adminUsername
       adminPassword: adminPassword
+      windowsConfiguration: {
+        patchSettings: {
+          enableHotpatching: true
+          patchMode: 'AutomaticByPlatform'
+        }
+        provisionVMAgent: true
+        enableAutomaticUpdates: true
+      }
     }
     storageProfile: {
       imageReference: {
@@ -65,7 +76,7 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
         version: 'latest'
       }
       osDisk: {
-        name: 'osDisk'
+        name: 'dc01-osDisk'
         caching: 'ReadWrite'
         createOption: 'FromImage'
       }
