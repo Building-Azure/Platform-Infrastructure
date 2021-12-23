@@ -60,10 +60,6 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
       adminUsername: adminUsername
       adminPassword: adminPassword
       windowsConfiguration: {
-        patchSettings: {
-          enableHotpatching: true
-          patchMode: 'AutomaticByPlatform'
-        }
         provisionVMAgent: true
         enableAutomaticUpdates: true
       }
