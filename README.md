@@ -27,9 +27,11 @@ The following locations have these address ranges
 - Azure North Europe 10.100.1.0/16
 ### VNET Ranges
 #### Azure West Europe
-- Platform-Hub 10.100.0.0/24
-- Platform-Identity 10.100.1.0/24
+- hub-virtualnetwork 10.100.0.0/24
+- identity-spoke-virtualnetwork 10.100.1.0/24
+- corporate-spoke-virtualnetwork 10.100.2.0/24
 
 #### Azure North Europe
-- Platform-Hub 10.101.0.0/24
-- Platform-Identity 10.101.1.0/24
+- hub-virtualnetwork 10.101.0.0/24
+- identity-spoke-virtualnetwork 10.101.1.0/24
+- corporate-spoke-virtualnetwork 10.101.2.0/24
