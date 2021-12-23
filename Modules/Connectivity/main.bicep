@@ -111,4 +111,14 @@ resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-
   }
 }
 
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: 'hubvpntroubleshooting'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Premium_LRS'
+  }
+}
+
+
 output subnetResourceId string = virtualNetwork::gatewaySubnet.id
