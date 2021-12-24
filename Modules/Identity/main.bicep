@@ -5,13 +5,14 @@ param domainControllerName string
 // param workspaceKey string
 param addressSpace string
 param logAnalyticsWorkspaceName string
-
+param logAnalyticsResourceGroup string 
 
 // This should return an array of something like ['10', '100', '0', '0'] which makes it easier to use for subnetting below
 var addressSpaceOctets = split(addressSpace, '.')
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   name: logAnalyticsWorkspaceName
+  scope: resourceGroup(logAnalyticsResourceGroup)
 }
 
 
