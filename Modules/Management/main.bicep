@@ -21,7 +21,7 @@ resource automationAccount 'Microsoft.Automation/automationAccounts@2021-06-22' 
 }
 
 resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
-  name: 'platformazurecshell'
+  name: 'cloudshell-${uniqueString(resourceGroup().id)}-stg'
   location: location
   kind: 'StorageV2'
   sku: {
