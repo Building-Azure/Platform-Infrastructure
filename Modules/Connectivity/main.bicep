@@ -3,6 +3,7 @@ param location string
 param addressSpace string
 param hqPublicIPAddress string
 param hqLocalAddressPrefix string
+param preSharedKey string
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'hub-virtualnetwork-${location}'
@@ -55,51 +56,51 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
   }
 }
 
-// resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
-//   name: 'hub-gateway'
-//   location: location
-//   properties: {
-//     ipConfigurations: [
-//       {
-//         name: 'gatewayIPConfig'
-//         properties: {
-//           privateIPAllocationMethod: 'Dynamic'
-//           subnet: {
-//             id: virtualNetwork::gatewaySubnet.id
-//           }
-//           publicIPAddress: {
-//             id: publicIP.id
-//           }
-//         }
-//       }
-//     ]
-//     sku: {
-//       name: 'Basic'
-//       tier: 'Basic'
-//     }
-//     gatewayType: 'Vpn'
-//     vpnType: 'RouteBased'
-//     enableBgp: false
-//   }
-// }
+resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2021-05-01' = {
+  name: 'gateway-${location}'
+  location: location
+  properties: {
+    ipConfigurations: [
+      {
+        name: 'gatewayIPConfig'
+        properties: {
+          privateIPAllocationMethod: 'Dynamic'
+          subnet: {
+            id: virtualNetwork::gatewaySubnet.id
+          }
+          publicIPAddress: {
+            id: publicIP.id
+          }
+        }
+      }
+    ]
+    sku: {
+      name: 'Basic'
+      tier: 'Basic'
+    }
+    gatewayType: 'Vpn'
+    vpnType: 'RouteBased'
+    enableBgp: false
+  }
+}
 
-// resource vpnVnetConnection 'Microsoft.Network/connections@2021-05-01' = {
-//   name: 'buildingazure-hq-connection'
-//   location: location
-//   properties: {
-//     virtualNetworkGateway1: {
-//       id: virtualNetworkGateway.id
-//       properties:{}
-//     }
-//     localNetworkGateway2: {
-//       id: localNetworkGateway.id
-//       properties:{}
-//     }
-//     connectionType: 'IPsec'
-//     routingWeight: 0
-//     sharedKey: preSharedKey
-//   }
-// }
+resource vpnVnetConnection 'Microsoft.Network/connections@2021-05-01' = {
+  name: 'buildingazure-hq-connection'
+  location: location
+  properties: {
+    virtualNetworkGateway1: {
+      id: virtualNetworkGateway.id
+      properties:{}
+    }
+    localNetworkGateway2: {
+      id: localNetworkGateway.id
+      properties:{}
+    }
+    connectionType: 'IPsec'
+    routingWeight: 0
+    sharedKey: preSharedKey
+  }
+}
 
 // resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-07-01' = {
 //   name: 'hub-virtualnetwork/identity'
