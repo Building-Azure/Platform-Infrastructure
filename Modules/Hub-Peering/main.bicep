@@ -7,7 +7,7 @@ resource identityVirtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' e
 }
 
 resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-07-01' = {
-  name: 'hub-virtualnetwork/identity'
+  name: '${identityVirtualNetworkName}/identity'
   properties: {
     allowVirtualNetworkAccess: true
     allowForwardedTraffic: true
