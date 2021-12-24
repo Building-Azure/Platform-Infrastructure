@@ -193,7 +193,7 @@ resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extension
       workspaceId: logAnalyticsWorkspace.id
     }
     protectedSettings: {
-      workspaceKey: logAnalyticsWorkspace.listKeys().keys[0].value
+      workspaceKey: logAnalyticsWorkspace.listKeys().primarySharedKey.value
     }
   }
 }
