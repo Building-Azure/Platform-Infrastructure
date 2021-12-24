@@ -6,6 +6,8 @@ param companyPrefix string = 'platform'
 param azureRegions array = [
   'westeurope'
   'northeurope'
+  'uksouth'
+  'ukwest'
 ] 
 
 // resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
