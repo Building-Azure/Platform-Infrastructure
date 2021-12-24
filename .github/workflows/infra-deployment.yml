@@ -32,7 +32,6 @@ jobs:
         scope: subscription
         region:  westeurope
         template: ./main.bicep
-        deploymentMode: Complete
         deploymentName: 'Github-Actions'
         failOnStdErr: false
 
