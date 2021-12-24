@@ -32,4 +32,16 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   }
 }
 
+resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: 'nsgstg${uniqueString(resourceGroup().id)}'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Premium_LRS'
+  }
+  tags: {
+    'usage' : 'NSG Flow Logs'
+  }
+}
+
 
