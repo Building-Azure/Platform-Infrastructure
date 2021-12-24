@@ -111,7 +111,7 @@ resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-
   }
 }
 
-resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+resource vpnStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: 'hubvpntroubleshooting'
   location: location
   kind: 'StorageV2'
@@ -119,6 +119,17 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
     name: 'Premium_LRS'
   }
 }
+
+resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: 'platformnsgflowlogs'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Premium_LRS'
+  }
+}
+
+
 
 
 output subnetResourceId string = virtualNetwork::gatewaySubnet.id

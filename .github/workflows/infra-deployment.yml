@@ -67,3 +67,31 @@ jobs:
         deploymentName: 'Github-Actions'
         parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}} workspaceKey=${{ secrets.LOGANALYTICS_WORKSPACE_KEY}}
         failOnStdErr: false
+
+  Management:
+    name: Management
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+      
+      # Checkout code
+    - uses: actions/checkout@main
+
+    # Log into Azure
+    - name: Login to Azure with OIDC
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Build Identity Infrastructure
+      uses: azure/arm-deploy@v1
+      with:
+        scope: resourcegroup
+        resourceGroupName: bldazure-management-westeurope
+        region:  westeurope
+        template: ./Modules/Management/main.bicep
+        deploymentMode: Complete
+        deploymentName: 'Github-Actions'
+        failOnStdErr: false
