@@ -38,6 +38,14 @@ param azureRegions array = [
   }
 ]
 
+param privateDNSZoneConfig array = [
+  {
+    zoneName: 'privatelink.azure-automation.net'
+  }
+  {
+    zoneName: 'privatelink.database.windows.net'
+  }
+]
 
  resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
    name: '${companyPrefix}-connectivity-${azureRegion.region}'
@@ -56,6 +64,11 @@ param azureRegions array = [
 
 resource networkWatcherRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${companyPrefix}-networkwatcher'
+  location: azureRegions[0].region
+ }
+
+ resource privateDNSZoneRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: '${companyPrefix}-privatednszones'
   location: azureRegions[0].region
  }
 
@@ -113,4 +126,12 @@ module hubPeeringModule 'Modules/Hub-Peering/main.bicep' = [for (azureRegion, i)
   }
 }]
 
+module dnsZoneModule 'Modules/Private-DNS-Zones/main.bicep' = [for (dnsZone, i) in privateDNSZoneConfig: {
+  name: 'privateDNSZoneModule-${dnsZone.zoneName}'
+  scope: privateDNSZoneRG
+  params: {
+    location: azureRegions[0].region
+    privateDNSZoneName: privateDNSZoneConfig[i].zoneName
+  }
+}]
 
