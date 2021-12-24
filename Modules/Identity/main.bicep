@@ -219,4 +219,4 @@ resource identitySpokePeering 'Microsoft.Network/virtualNetworks/virtualNetworkP
 }
 
 output identityVirtualNetworkName string = virtualNetwork.name
-
+output identityVirtualNetworkResourceGroup string = string(resourceGroup())
