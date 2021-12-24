@@ -119,8 +119,5 @@ module hubPeeringModule 'Modules/Hub-Peering/main.bicep' = [for (azureRegion, i)
 module dnsZoneModule 'Modules/Private-DNS-Zones/main.bicep' = {
   name: 'privateDNSZoneModule'
   scope: privateDNSZoneRG
-  params: {
-    location: azureRegions[0].region
-  }
 }
 

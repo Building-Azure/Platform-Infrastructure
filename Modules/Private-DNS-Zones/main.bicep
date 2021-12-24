@@ -1,6 +1,3 @@
-param location string
-
-
 // Check back for update or new urls at: https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns#azure-services-dns-zone-configuration
 var dnsZones = [
   'privatelink.azure-automation.net'
