@@ -1,19 +1,8 @@
 param preSharedKey string
-var location = 'westeurope' 
-var regionalHubAddressSpace = {
-  'westeurope' : '10.100.0.0/24'
-  'northeurope' : '10.101.0.0/24'
-  
-  'uksouth' : '10.102.0.0/24'
-  'ukwest' : '10.103.0.0/24'
-  
-  'eastus' : '10.104.0.0/24'
-  'westus' : '10.105.0.0/24'
-} 
-
+param location string 
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
-  name: 'hub-virtualnetwork'
+  name: 'hub-virtualnetwork-${location}'
   location: location
   properties: {
     addressSpace: {
@@ -36,7 +25,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   }
 }
 
-resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
+/* resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   name: 'hub-gateway-pip'
   location: location
   sku: {
@@ -144,4 +133,4 @@ resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01
 }
 
 
-output subnetResourceId string = virtualNetwork::gatewaySubnet.id
+output subnetResourceId string = virtualNetwork::gatewaySubnet.id */
