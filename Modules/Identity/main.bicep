@@ -213,7 +213,7 @@ resource identitySpokePeering 'Microsoft.Network/virtualNetworks/virtualNetworkP
     allowGatewayTransit: true
     useRemoteGateways: true
     remoteVirtualNetwork: {
-      id: '${hubVirtualNetwork.id}'
+      id: hubVirtualNetwork.id
     }
   }
 }
