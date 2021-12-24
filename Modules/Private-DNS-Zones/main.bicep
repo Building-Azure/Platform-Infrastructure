@@ -25,7 +25,6 @@ var dnsZones = [
   'privatelink.azconfig.io'
   'privatelink.siterecovery.windowsazure.com'
   'privatelink.servicebus.windows.net'
-  'privatelink.servicebus.windows.net'
   'privatelink.azure-devices.net'
   'privatelink.servicebus.windows.net'
   'privatelink.eventgrid.azure.net'
