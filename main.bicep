@@ -83,13 +83,14 @@ module connectivityModule 'Modules/Connectivity/main.bicep' = [for (azureRegion,
   }
 }]
 
-// module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in azureRegions: {
-//   name: 'identityModule-${azureRegion.region}'
-//   scope: identityRG[i]
-//   params: {
-//     location: azureRegion.region
-//     adminUsername: adminUsername
-//     adminPassword:adminPassword
-//     workspaceKey: 
-//   }
-// }]
+module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in azureRegions: {
+  name: 'identityModule-${azureRegion.region}'
+  scope: identityRG[i]
+  params: {
+    location: azureRegion.region
+    addressSpace: azureRegion.addressSpace
+    // adminUsername: adminUsername
+    // adminPassword:adminPassword
+    // workspaceKey: 
+  }
+}]
