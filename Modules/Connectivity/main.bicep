@@ -127,4 +127,5 @@ resource vpnStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   }
 }
 
+output hubVirtualNetworkName string = virtualNetwork.name
 // output subnetResourceId string = virtualNetwork::gatewaySubnet.id 

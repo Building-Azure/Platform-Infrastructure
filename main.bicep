@@ -98,5 +98,7 @@ module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in a
     domainControllerName: azureRegion.domainControllerName
     logAnalyticsWorkspaceName: managementModule.outputs.logAnalyticsWorkspaceName
     logAnalyticsResourceGroup: managementRG.name
+    hubVirtualNetworkName: connectivityModule[i].outputs.hubVirtualNetworkName
+    hubVirtualNetworkResourceGroup: connectivityRG[i].name
   }
 }]

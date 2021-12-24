@@ -5,7 +5,9 @@ param domainControllerName string
 // param workspaceKey string
 param addressSpace string
 param logAnalyticsWorkspaceName string
-param logAnalyticsResourceGroup string 
+param logAnalyticsResourceGroup string
+param hubVirtualNetworkName string
+param hubVirtualNetworkResourceGroup string
 
 // This should return an array of something like ['10', '100', '0', '0'] which makes it easier to use for subnetting below
 var addressSpaceOctets = split(addressSpace, '.')
@@ -13,6 +15,11 @@ var addressSpaceOctets = split(addressSpace, '.')
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   name: logAnalyticsWorkspaceName
   scope: resourceGroup(logAnalyticsResourceGroup)
+}
+
+resource hubVirtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' existing = {
+  name: hubVirtualNetworkName
+  scope: resourceGroup(hubVirtualNetworkResourceGroup)
 }
 
 
@@ -198,17 +205,18 @@ resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extension
   }
 }
 
-// resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
-//   name: 'identity-spoke-virtualnetwork/hub'
-//   properties: {
-//     allowVirtualNetworkAccess: true
-//     allowForwardedTraffic: true
-//     allowGatewayTransit: true
-//     useRemoteGateways: true
-//     remoteVirtualNetwork: {
-//       id: '/subscriptions/a8d89de8-d014-4deb-81f8-cecb19fbe41d/resourceGroups/bldazure-connectivity-westeurope/providers/Microsoft.Network/virtualNetworks/hub-virtualnetwork'
-//     }
-//   }
-// }
+resource identitySpokePeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
+  name: '${virtualNetwork.name}/hub'
+  properties: {
+    allowVirtualNetworkAccess: true
+    allowForwardedTraffic: true
+    allowGatewayTransit: true
+    useRemoteGateways: true
+    remoteVirtualNetwork: {
+      id: '${hubVirtualNetwork.id}'
+    }
+  }
+}
+
 
 
