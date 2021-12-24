@@ -2,8 +2,9 @@ targetScope = 'subscription'
 
 param companyPrefix string = 'platform'
 param preSharedKey string
-// param adminUsername string
-// param adminPassword string
+param adminUsername string
+param adminPassword string
+
 // Enter the Azure Regions you wish to use. This will deploy things like a networking hub and active directory domain controller VM into each region. Certain resources like Log Analytics Workspace will be only deployed into a single region - selected from the first element of this array
 param azureRegions array = [
   {
@@ -12,24 +13,28 @@ param azureRegions array = [
     addressSpace: '10.100.0.0'
     hqPublicIPAddress: '185.116.112.220'
     hqLocalAddressPrefix: '192.168.1.0/24'
+    domainControllerName: 'dc01'
   }
   {
     region: 'northeurope'
     addressSpace: '10.101.0.0'
     hqPublicIPAddress: '185.116.112.220'
     hqLocalAddressPrefix: '192.168.1.0/24'
+    domainControllerName: 'dc02'
   }
   {
     region: 'eastus'
     addressSpace: '10.102.0.0'
     hqPublicIPAddress: '185.116.112.220'
     hqLocalAddressPrefix: '192.168.1.0/24'
+    domainControllerName: 'dc03'
   }
   {
     region: 'westus'
     addressSpace: '10.103.0.0'
     hqPublicIPAddress: '185.116.112.220'
     hqLocalAddressPrefix: '192.168.1.0/24'
+    domainControllerName: 'dc04'
   }
 ]
 
@@ -74,7 +79,6 @@ module connectivityModule 'Modules/Connectivity/main.bicep' = [for (azureRegion,
   name: 'connectivityModule-${azureRegion.region}'
   scope: connectivityRG[i]
   params: {
-    //preSharedKey: preSharedKey
     location: azureRegion.region
     addressSpace: azureRegion.addressSpace
     hqPublicIPAddress: azureRegion.hqPublicIPAddress
@@ -89,8 +93,8 @@ module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in a
   params: {
     location: azureRegion.region
     addressSpace: azureRegion.addressSpace
-    // adminUsername: adminUsername
-    // adminPassword:adminPassword
-    // workspaceKey: 
+    adminUsername: adminUsername
+    adminPassword:adminPassword
+    domainControllerName: azureRegion.domainControllerName
   }
 }]

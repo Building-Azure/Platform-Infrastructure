@@ -1,6 +1,7 @@
 param location string
-// param adminUsername string
-// param adminPassword string
+param adminUsername string
+param adminPassword string
+param domainControllerName string
 // param workspaceKey string
 param addressSpace string
 
@@ -76,51 +77,51 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   }
 }
 
-// resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-//   name: 'dc01-win2022'
-//   location: location
-//   properties: {
-//     licenseType: 'Windows_Server'
+resource windowsVM 'Microsoft.Compute/virtualMachines@2021-07-01' = {
+  name: '${domainControllerName}-win2022'
+  location: location
+  properties: {
+    licenseType: 'Windows_Server'
 
-//     hardwareProfile: {
-//       vmSize: 'Standard_B2s'
-//     }
-//     osProfile: {
-//       computerName: 'DC01-WIN2022'
-//       adminUsername: adminUsername
-//       adminPassword: adminPassword
-//       windowsConfiguration: {
-//         provisionVMAgent: true
-//         enableAutomaticUpdates: true
-//       }
-//     }
-//     storageProfile: {
-//       imageReference: {
-//         publisher: 'MicrosoftWindowsServer'
-//         offer: 'WindowsServer'
-//         sku: '2022-datacenter-azure-edition'
-//         version: 'latest'
-//       }
-//       osDisk: {
-//         name: 'dc01-osDisk'
-//         caching: 'ReadWrite'
-//         createOption: 'FromImage'
-//       }
-//     }
-//     networkProfile: {
-//       networkInterfaces: [
-//         {
-//           id: networkInterface.id
-//         }
-//       ]
-//     }
-//     diagnosticsProfile: {
-//       bootDiagnostics: {
-//         enabled: true
-//       }
-//     }
-//   }
-// }
+    hardwareProfile: {
+      vmSize: 'Standard_B2s'
+    }
+    osProfile: {
+      computerName: '${toUpper(domainControllerName)}-WIN2022'
+      adminUsername: adminUsername
+      adminPassword: adminPassword
+      windowsConfiguration: {
+        provisionVMAgent: true
+        enableAutomaticUpdates: true
+      }
+    }
+    storageProfile: {
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter-azure-edition'
+        version: 'latest'
+      }
+      osDisk: {
+        name: '${domainControllerName}-osDisk'
+        caching: 'ReadWrite'
+        createOption: 'FromImage'
+      }
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: networkInterface.id
+        }
+      ]
+    }
+    diagnosticsProfile: {
+      bootDiagnostics: {
+        enabled: true
+      }
+    }
+  }
+}
 
 // resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
 //   name: 'dc01-win2022/AzureNetworkWatcherExtension'

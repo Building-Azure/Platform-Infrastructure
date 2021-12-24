@@ -33,7 +33,7 @@ jobs:
         region:  westeurope
         template: ./main.bicep
         deploymentName: 'Github-Actions'
-        parameters: preSharedKey=${{ secrets.PRESHARED_KEY }}
+        parameters: preSharedKey=${{ secrets.PRESHARED_KEY }} adminPassword=${{ secrets.ADMIN_PASSWORD}} adminUsername=${{ secrets.ADMIN_USERNAME }}
         failOnStdErr: false
 
   # Connectivity:
