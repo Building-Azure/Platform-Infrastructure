@@ -9,16 +9,16 @@ permissions:
       id-token: write
       contents: read
 jobs:
-  Connectivity:
-    name: Connectivity
+  Platform:
+    name: Platform
     environment: Production
     runs-on: ubuntu-latest
     steps:
-
+      
       # Checkout code
     - uses: actions/checkout@main
 
-      # Log into Azure
+    # Log into Azure
     - name: Login to Azure with OIDC
       uses: azure/login@v1
       with:
@@ -26,72 +26,99 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Deploy Bicep file
-    - name: Build Connectivity Infrastructure
+    - name: Build Platform Infrastructure
       uses: azure/arm-deploy@v1
       with:
-        scope: resourcegroup
-        resourceGroupName: bldazure-connectivity-westeurope
+        scope: subscription
         region:  westeurope
-        template: ./Modules/Connectivity/main.bicep
+        template: ./main.bicep
         deploymentMode: Complete
         deploymentName: 'Github-Actions'
-        parameters: preSharedKey=${{ secrets.PRESHARED_KEY }}
         failOnStdErr: false
+
+  # Connectivity:
+  #   name: Connectivity
+  #   environment: Production
+  #   runs-on: ubuntu-latest
+  #   steps:
+
+  #     # Checkout code
+  #   - uses: actions/checkout@main
+
+  #     # Log into Azure
+  #   - name: Login to Azure with OIDC
+  #     uses: azure/login@v1
+  #     with:
+  #       client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #       tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+  #     # Deploy Bicep file
+  #   - name: Build Connectivity Infrastructure
+  #     uses: azure/arm-deploy@v1
+  #     with:
+  #       scope: resourcegroup
+  #       resourceGroupName: bldazure-connectivity-westeurope
+  #       region:  westeurope
+  #       template: ./Modules/Connectivity/main.bicep
+  #       deploymentMode: Complete
+  #       deploymentName: 'Github-Actions'
+  #       parameters: preSharedKey=${{ secrets.PRESHARED_KEY }}
+  #       failOnStdErr: false
   
-  Identity:
-    name: Identity
-    environment: Production
-    runs-on: ubuntu-latest
-    steps:
+  # Identity:
+  #   name: Identity
+  #   environment: Production
+  #   runs-on: ubuntu-latest
+  #   steps:
       
-      # Checkout code
-    - uses: actions/checkout@main
+  #     # Checkout code
+  #   - uses: actions/checkout@main
 
-    # Log into Azure
-    - name: Login to Azure with OIDC
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #   # Log into Azure
+  #   - name: Login to Azure with OIDC
+  #     uses: azure/login@v1
+  #     with:
+  #       client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #       tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Build Identity Infrastructure
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        resourceGroupName: bldazure-identity-westeurope
-        region:  westeurope
-        template: ./Modules/Identity/main.bicep
-        deploymentMode: Complete
-        deploymentName: 'Github-Actions'
-        parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}} workspaceKey=${{ secrets.LOGANALYTICS_WORKSPACE_KEY}}
-        failOnStdErr: false
+  #   - name: Build Identity Infrastructure
+  #     uses: azure/arm-deploy@v1
+  #     with:
+  #       scope: resourcegroup
+  #       resourceGroupName: bldazure-identity-westeurope
+  #       region:  westeurope
+  #       template: ./Modules/Identity/main.bicep
+  #       deploymentMode: Complete
+  #       deploymentName: 'Github-Actions'
+  #       parameters: adminUsername=${{ secrets.ADMIN_USERNAME }} adminPassword=${{ secrets.ADMIN_PASSWORD}} workspaceKey=${{ secrets.LOGANALYTICS_WORKSPACE_KEY}}
+  #       failOnStdErr: false
 
-  Management:
-    name: Management
-    environment: Production
-    runs-on: ubuntu-latest
-    steps:
+  # Management:
+  #   name: Management
+  #   environment: Production
+  #   runs-on: ubuntu-latest
+  #   steps:
       
-      # Checkout code
-    - uses: actions/checkout@main
+  #     # Checkout code
+  #   - uses: actions/checkout@main
 
-    # Log into Azure
-    - name: Login to Azure with OIDC
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #   # Log into Azure
+  #   - name: Login to Azure with OIDC
+  #     uses: azure/login@v1
+  #     with:
+  #       client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #       tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Build Management Infrastructure
-      uses: azure/arm-deploy@v1
-      with:
-        scope: resourcegroup
-        resourceGroupName: bldazure-management-westeurope
-        region:  westeurope
-        template: ./Modules/Management/main.bicep
-        deploymentMode: Complete
-        deploymentName: 'Github-Actions'
-        failOnStdErr: false
+  #   - name: Build Management Infrastructure
+  #     uses: azure/arm-deploy@v1
+  #     with:
+  #       scope: resourcegroup
+  #       resourceGroupName: bldazure-management-westeurope
+  #       region:  westeurope
+  #       template: ./Modules/Management/main.bicep
+  #       deploymentMode: Complete
+  #       deploymentName: 'Github-Actions'
+  #       failOnStdErr: false
