@@ -182,7 +182,7 @@ resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/ex
 }
 
 resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: 'dc01-win2022/Microsoft.Insights.LogAnalyticsAgent'
+  name: '${domainControllerName}-win2022/Microsoft.Insights.LogAnalyticsAgent'
   location: location
   properties: {
     publisher: 'Microsoft.EnterpriseCloud.Monitoring'
@@ -193,7 +193,7 @@ resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extension
       workspaceId: logAnalyticsWorkspace.id
     }
     protectedSettings: {
-      workspaceKey: logAnalyticsWorkspace.listKeys().primarySharedKey.value
+      workspaceKey: logAnalyticsWorkspace.listKeys().primarySharedKey
     }
   }
 }
