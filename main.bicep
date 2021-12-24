@@ -15,10 +15,10 @@ param azureRegions array = [
    location: azureRegion
  }]
 
-// resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-//   name: '${companyPrefix}-identity'
-//   location: location
-// }
+ resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
+   name: '${companyPrefix}-identity-${azureRegion}'
+   location: azureRegion
+ }]
 
  resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
    name: '${companyPrefix}-management'
