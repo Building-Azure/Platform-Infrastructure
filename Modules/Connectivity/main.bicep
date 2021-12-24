@@ -43,7 +43,7 @@ resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
 }
 
 resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01' = {
-  name: 'hq-lgw'
+  name: 'hq-lgw-${location}'
   location: location
   properties: {
     gatewayIpAddress: hqPublicIPAddress
@@ -114,13 +114,16 @@ resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01'
 //   }
 // }
 
-// resource vpnStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
-//   name: 'hubvpntroubleshooting'
-//   location: location
-//   kind: 'StorageV2'
-//   sku: {
-//     name: 'Premium_LRS'
-//   }
-// }
+resource vpnStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: 'vpnstg${uniqueString(resourceGroup().id)}'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Premium_LRS'
+  }
+  tags: {
+    usage: 'VPN Troubleshooting Logs'
+  }
+}
 
 // output subnetResourceId string = virtualNetwork::gatewaySubnet.id 
