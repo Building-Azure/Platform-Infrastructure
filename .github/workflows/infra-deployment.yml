@@ -9,8 +9,8 @@ permissions:
       id-token: write
       contents: read
 jobs:
-  Hub-Network:
-    name: Hub-Network
+  Connectivity:
+    name: Connectivity
     environment: Production
     runs-on: ubuntu-latest
     steps:
