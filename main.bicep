@@ -2,6 +2,8 @@ targetScope = 'subscription'
 
 param companyPrefix string = 'platform'
 param preSharedKey string
+// param adminUsername string
+// param adminPassword string
 // Enter the Azure Regions you wish to use. This will deploy things like a networking hub and active directory domain controller VM into each region. Certain resources like Log Analytics Workspace will be only deployed into a single region - selected from the first element of this array
 param azureRegions array = [
   {
@@ -80,3 +82,14 @@ module connectivityModule 'Modules/Connectivity/main.bicep' = [for (azureRegion,
     preSharedKey: preSharedKey
   }
 }]
+
+// module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in azureRegions: {
+//   name: 'identityModule-${azureRegion.region}'
+//   scope: identityRG[i]
+//   params: {
+//     location: azureRegion.region
+//     adminUsername: adminUsername
+//     adminPassword:adminPassword
+//     workspaceKey: 
+//   }
+// }]

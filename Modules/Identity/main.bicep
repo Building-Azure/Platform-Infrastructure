@@ -1,10 +1,33 @@
-var location = 'westeurope'
+param location string
 param adminUsername string
 param adminPassword string
 param workspaceKey string
 
+resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
+  name: 'dc-subnet-nsg'
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'allowAll'
+        properties: {
+          description: 'description'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 100
+          direction: 'Inbound'
+        }
+      }
+    ]
+  }
+}
+
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
-  name: 'identity-spoke-virtualnetwork'
+  name: 'identity-virtualnetwork-${location}'
   location: location
   properties: {
     addressSpace: {
@@ -48,30 +71,6 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
     ]
   }
 }
-
-resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
-  name: 'dc-subnet-nsg'
-  location: location
-  properties: {
-    securityRules: [
-      {
-        name: 'allowAll'
-        properties: {
-          description: 'description'
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          destinationPortRange: '*'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-          access: 'Allow'
-          priority: 100
-          direction: 'Inbound'
-        }
-      }
-    ]
-  }
-}
-
 
 resource windowsVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'dc01-win2022'
