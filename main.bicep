@@ -108,7 +108,7 @@ module hubPeeringModule 'Modules/Hub-Peering/main.bicep' = [for (azureRegion, i)
   scope: connectivityRG[i]
   params: {
     identityVirtualNetworkName: identityModule[i].outputs.identityVirtualNetworkName
-    identityVirtualNetworkResourceGroup: identityModule[i].outputs.identityVirtualNetworkResourceGroup
+    identityVirtualNetworkResourceGroup: identityRG[i].name
     hubVirtualNetworkName: connectivityModule[i].outputs.hubVirtualNetworkName
   }
 }]
