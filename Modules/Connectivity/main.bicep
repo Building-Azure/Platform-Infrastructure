@@ -1,5 +1,16 @@
 param preSharedKey string
 var location = 'westeurope' 
+var regionalHubAddressSpace = {
+  'westeurope' : '10.100.0.0/24'
+  'northeurope' : '10.101.0.0/24'
+  
+  'uksouth' : '10.102.0.0/24'
+  'ukwest' : '10.103.0.0/24'
+  
+  'eastus' : '10.104.0.0/24'
+  'westus' : '10.105.0.0/24'
+} 
+
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'hub-virtualnetwork'
