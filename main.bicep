@@ -20,15 +20,23 @@ param azureRegions array = [
 //   location: location
 // }
 
-// resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-//   name: '${companyPrefix}-management'
-//   location: location
-// }
+ resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+   name: '${companyPrefix}-management'
+   location: azureRegions[0]
+ }
 
 resource networkWatcherRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${companyPrefix}-networkwatcher'
   location: azureRegions[0]
  }
+
+module managementModule 'Modules/Management/main.bicep' = {
+  name: 'managementModule'
+  scope: managementRG
+  params: {
+    location: azureRegions[0]
+  }
+}
 
 module networkWatcher 'Modules/NetworkWatcher/main.bicep' = [for azureRegion in azureRegions: {
   name: 'networkWatcherModule-${azureRegion}'

@@ -1,4 +1,4 @@
-var location = 'westeurope'
+param location string = 'westeurope'
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: 'platform-law'
