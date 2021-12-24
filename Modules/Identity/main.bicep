@@ -4,9 +4,16 @@ param adminPassword string
 param domainControllerName string
 // param workspaceKey string
 param addressSpace string
+param logAnalyticsWorkspaceName string
+
 
 // This should return an array of something like ['10', '100', '0', '0'] which makes it easier to use for subnetting below
 var addressSpaceOctets = split(addressSpace, '.')
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
+  name: logAnalyticsWorkspaceName
+}
+
 
 resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
   name: 'dc-subnet-nsg'
@@ -123,72 +130,72 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2021-07-01' = {
   }
 }
 
-// resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-//   name: 'dc01-win2022/AzureNetworkWatcherExtension'
-//   location: location
-//   properties: {
-//     publisher: 'Microsoft.Azure.NetworkWatcher'
-//     type: 'NetworkWatcherAgentWindows'
-//     typeHandlerVersion: '1.4'
-//     autoUpgradeMinorVersion: true
-//     settings: {}
-//   }
-// }
+resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: '${domainControllerName}-win2022/AzureNetworkWatcherExtension'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Azure.NetworkWatcher'
+    type: 'NetworkWatcherAgentWindows'
+    typeHandlerVersion: '1.4'
+    autoUpgradeMinorVersion: true
+    settings: {}
+  }
+}
 
-// resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-//   name: 'dc01-win2022/IaaSAntimalware'
-//   location: location
-//   properties: {
-//     publisher: 'Microsoft.Azure.Security'
-//     type: 'IaaSAntimalware'
-//     typeHandlerVersion: '1.3'
-//     autoUpgradeMinorVersion: true
-//     settings: {
-//       AntimalwareEnabled: true
-//       RealtimeProtectionEnabled: true
-//       ScheduledScanSettings: {
-//         isEnabled: true
-//         day: '7'
-//         time: '120'
-//         scanType: 'Quick'
-//       }
-//       Exclusions: {
-//         Extensions: ''
-//         Paths: ''
-//         Processes: ''
-//       }
-//     }
-//   }
-// }
+resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: '${domainControllerName}-win2022/IaaSAntimalware'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Azure.Security'
+    type: 'IaaSAntimalware'
+    typeHandlerVersion: '1.3'
+    autoUpgradeMinorVersion: true
+    settings: {
+      AntimalwareEnabled: true
+      RealtimeProtectionEnabled: true
+      ScheduledScanSettings: {
+        isEnabled: true
+        day: '7'
+        time: '120'
+        scanType: 'Quick'
+      }
+      Exclusions: {
+        Extensions: ''
+        Paths: ''
+        Processes: ''
+      }
+    }
+  }
+}
 
-// resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-//   name: 'dc01-win2022/AzureMonitorWindowsAgent'
-//   location: location
-//   properties: {
-//     publisher: 'Microsoft.Azure.Monitor'
-//     type: 'AzureMonitorWindowsAgent'
-//     typeHandlerVersion: '1.0'
-//     autoUpgradeMinorVersion: true
-//     settings: {}
-//   }
-// }
+resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: '${domainControllerName}-win2022/AzureMonitorWindowsAgent'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Azure.Monitor'
+    type: 'AzureMonitorWindowsAgent'
+    typeHandlerVersion: '1.0'
+    autoUpgradeMinorVersion: true
+    settings: {}
+  }
+}
 
-// resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-//   name: 'dc01-win2022/Microsoft.Insights.LogAnalyticsAgent'
-//   location: location
-//   properties: {
-//     publisher: 'Microsoft.EnterpriseCloud.Monitoring'
-//     type: 'MicrosoftMonitoringAgent'
-//     typeHandlerVersion: '1.0'
-//     autoUpgradeMinorVersion: true
-//     settings: {
-//       workspaceId: 'fb0a7adb-8812-4cd9-b204-3faddd83b6bf'
-//     }
-//     protectedSettings: {
-//       workspaceKey: workspaceKey
-//     }
-//   }
-// }
+resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: 'dc01-win2022/Microsoft.Insights.LogAnalyticsAgent'
+  location: location
+  properties: {
+    publisher: 'Microsoft.EnterpriseCloud.Monitoring'
+    type: 'MicrosoftMonitoringAgent'
+    typeHandlerVersion: '1.0'
+    autoUpgradeMinorVersion: true
+    settings: {
+      workspaceId: logAnalyticsWorkspace.id
+    }
+    protectedSettings: {
+      workspaceKey: logAnalyticsWorkspace.listKeys().keys[0].value
+    }
+  }
+}
 
 // resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
 //   name: 'identity-spoke-virtualnetwork/hub'
