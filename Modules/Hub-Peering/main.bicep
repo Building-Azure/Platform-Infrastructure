@@ -15,7 +15,7 @@ resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-
     allowGatewayTransit: true
     useRemoteGateways: false
     remoteVirtualNetwork: {
-      id: '${identityVirtualNetwork.id}'
+      id: identityVirtualNetwork.id
     }
   }
 }
