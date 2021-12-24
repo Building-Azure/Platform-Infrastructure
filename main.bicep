@@ -29,7 +29,7 @@ resource networkWatcherRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
  }
 
 module networkWatcher 'Modules/NetworkWatcher/main.bicep' = [for azureRegion in azureRegions: {
-  name: 'networkWatcherModule'
+  name: 'networkWatcherModule-${azureRegion}'
   scope: networkWatcherRG
   params: {
     location: azureRegion
