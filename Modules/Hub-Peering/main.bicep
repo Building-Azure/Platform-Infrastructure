@@ -7,7 +7,7 @@ resource identityVirtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' e
   scope: resourceGroup(identityVirtualNetworkResourceGroup)
 }
 
-resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020-07-01' = {
+resource peering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
   name: '${hubVirtualNetworkName}/identity'
   properties: {
     allowVirtualNetworkAccess: true
