@@ -1,6 +1,9 @@
 //param preSharedKey string
 param location string 
 param addressSpace string
+param hqPublicIPAddress string
+param hqLocalAddressPrefix string
+
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'hub-virtualnetwork-${location}'
   location: location
@@ -26,7 +29,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 }
 
 resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
-  name: 'hub-gateway-pip'
+  name: 'gateway-pip-${location}'
   location: location
   sku: {
     name: 'Basic'
@@ -39,18 +42,18 @@ resource publicIP 'Microsoft.Network/publicIPAddresses@2021-05-01' = {
   }
 }
 
-// resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01' = {
-//   name: 'buildingazure-hq-lgw'
-//   location: location
-//   properties: {
-//     gatewayIpAddress: '185.116.112.220'
-//     localNetworkAddressSpace: {
-//       addressPrefixes: [
-//         '192.168.1.0/24'
-//       ]
-//     }
-//   }
-// }
+resource localNetworkGateway 'Microsoft.Network/localNetworkGateways@2021-05-01' = {
+  name: 'hq-lgw'
+  location: location
+  properties: {
+    gatewayIpAddress: hqPublicIPAddress
+    localNetworkAddressSpace: {
+      addressPrefixes: [
+        hqLocalAddressPrefix
+      ]
+    }
+  }
+}
 
 // resource virtualNetworkGateway 'Microsoft.Network/virtualNetworkGateways@2020-11-01' = {
 //   name: 'hub-gateway'

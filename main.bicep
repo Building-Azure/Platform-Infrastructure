@@ -7,21 +7,30 @@ param azureRegions array = [
   {
     //Primary Azure Region for global resources like Log Analytics Workspace
     region: 'westeurope'
-    addressSpace: '10.100.0.0' 
+    addressSpace: '10.100.0.0'
+    hqPublicIPAddress: '185.116.112.220'
+    hqLocalAddressPrefix: '192.168.1.0/24'
   }
   {
     region: 'northeurope'
-    addressSpace: '10.101.0.0' 
+    addressSpace: '10.101.0.0'
+    hqPublicIPAddress: '185.116.112.220'
+    hqLocalAddressPrefix: '192.168.1.0/24'
   }
   {
     region: 'eastus'
-    addressSpace: '10.102.0.0' 
+    addressSpace: '10.102.0.0'
+    hqPublicIPAddress: '185.116.112.220'
+    hqLocalAddressPrefix: '192.168.1.0/24'
   }
   {
     region: 'westus'
-    addressSpace: '10.103.0.0' 
+    addressSpace: '10.103.0.0'
+    hqPublicIPAddress: '185.116.112.220'
+    hqLocalAddressPrefix: '192.168.1.0/24'
   }
-] 
+]
+
 
  resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
    name: '${companyPrefix}-connectivity-${azureRegion.region}'
@@ -66,5 +75,7 @@ module connectivityModule 'Modules/Connectivity/main.bicep' = [for (azureRegion,
     //preSharedKey: preSharedKey
     location: azureRegion.region
     addressSpace: azureRegion.addressSpace
+    hqPublicIPAddress: azureRegion.hqPublicIPAddress
+    hqLocalAddressPrefix: azureRegion.hqLocalAddressPrefix
   }
 }]
