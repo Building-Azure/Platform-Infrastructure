@@ -50,7 +50,7 @@ module connectivityModule 'Modules/Connectivity/main.bicep' = [for (azureRegion,
   name: 'connectivityModule-${azureRegion}'
   scope: connectivityRG[i]
   params: {
-    preSharedKey: preSharedKey
+    //preSharedKey: preSharedKey
     location: azureRegion
   }
 

@@ -1,4 +1,4 @@
-param preSharedKey string
+//param preSharedKey string
 param location string 
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
