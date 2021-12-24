@@ -1,20 +1,20 @@
 //param preSharedKey string
 param location string 
-
+param addressSpace string
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'hub-virtualnetwork-${location}'
   location: location
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '10.100.0.0/24'
+        '${addressSpace}/24'
       ]
     }
     subnets: [
       {
         name: 'GatewaySubnet'
         properties: {
-          addressPrefix: '10.100.0.0/27'
+          addressPrefix: '${addressSpace}/27'
         }
       }
     ]
