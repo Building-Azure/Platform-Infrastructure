@@ -10,10 +10,10 @@ param azureRegions array = [
   'ukwest'
 ] 
 
-// resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-//   name: '${companyPrefix}-connectivity'
-//   location: location
-// }
+ resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
+   name: '${companyPrefix}-connectivity-${azureRegion}'
+   location: azureRegion
+ }]
 
 // resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 //   name: '${companyPrefix}-identity'
