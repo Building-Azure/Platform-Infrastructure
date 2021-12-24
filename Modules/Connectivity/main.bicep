@@ -138,9 +138,10 @@ resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01
   sku: {
     name: 'Premium_LRS'
   }
+  tags: {
+    'usage' : 'NSG Flow Logs'
+  }
 }
-
-
 
 
 output subnetResourceId string = virtualNetwork::gatewaySubnet.id

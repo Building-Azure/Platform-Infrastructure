@@ -27,6 +27,9 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   sku: {
     name: 'Premium_LRS'
   }
+  tags: {
+    'usage' : 'Azure Cloud Shell'
+  }
 }
 
 
