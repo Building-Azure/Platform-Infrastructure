@@ -102,3 +102,14 @@ module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in a
     hubVirtualNetworkResourceGroup: connectivityRG[i].name
   }
 }]
+
+module hubPeeringModule 'Modules/Hub-Peering/main.bicep' = [for (azureRegion, i) in azureRegions: {
+  name: 'hubPeeringModule-${azureRegion.region}'
+  scope: connectivityRG[i]
+  params: {
+    identityVirtualNetworkName: identityModule[i].outputs.identityVirtualNetworkName
+    identityVirtualNetworkResourceGroup: identityRG[i].name
+  }
+}]
+
+
