@@ -97,6 +97,6 @@ module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in a
     adminPassword:adminPassword
     domainControllerName: azureRegion.domainControllerName
     logAnalyticsWorkspaceName: managementModule.outputs.logAnalyticsWorkspaceName
-    logAnalyticsWorkspaceResourceGroup: managementRG
+    logAnalyticsResourceGroup: managementRG.name
   }
 }]
