@@ -44,5 +44,6 @@ resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01
   }
 }
 
+output nsgFlowLogsStorageAccountName string = nsgFlowLogsStorageAccount.name
 output logAnalyticsWorkspaceName string = logAnalyticsWorkspace.name
 
