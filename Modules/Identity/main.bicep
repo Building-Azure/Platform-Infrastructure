@@ -123,7 +123,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 }
 
 resource windowsVM 'Microsoft.Compute/virtualMachines@2021-07-01' = {
-  name: '${domainControllerName}-win2022'
+  name: domainControllerName
   location: location
   properties: {
     licenseType: 'Windows_Server'
@@ -132,7 +132,7 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2021-07-01' = {
       vmSize: 'Standard_B2s'
     }
     osProfile: {
-      computerName: '${toUpper(domainControllerName)}-WIN2022'
+      computerName: domainControllerName
       adminUsername: adminUsername
       adminPassword: adminPassword
       windowsConfiguration: {
