@@ -266,22 +266,22 @@ resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/e
 //   }
 // }
 
-resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}/Microsoft.Insights.LogAnalyticsAgent'
-  location: location
-  properties: {
-    publisher: 'Microsoft.EnterpriseCloud.Monitoring'
-    type: 'MicrosoftMonitoringAgent'
-    typeHandlerVersion: '1.0'
-    autoUpgradeMinorVersion: true
-    settings: {
-      workspaceId: logAnalyticsWorkspace.id
-    }
-    protectedSettings: {
-      workspaceKey: logAnalyticsWorkspace.listKeys().primarySharedKey
-    }
-  }
-}
+// resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+//   name: '${domainControllerName}/Microsoft.Insights.LogAnalyticsAgent'
+//   location: location
+//   properties: {
+//     publisher: 'Microsoft.EnterpriseCloud.Monitoring'
+//     type: 'MicrosoftMonitoringAgent'
+//     typeHandlerVersion: '1.0'
+//     autoUpgradeMinorVersion: true
+//     settings: {
+//       workspaceId: logAnalyticsWorkspace.id
+//     }
+//     protectedSettings: {
+//       workspaceKey: logAnalyticsWorkspace.listKeys().primarySharedKey
+//     }
+//   }
+// }
 
 resource identitySpokePeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
   name: '${virtualNetwork.name}/hub'
