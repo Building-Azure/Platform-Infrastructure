@@ -169,7 +169,7 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2021-07-01' = {
 }
 
 resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}-win2022/AzureNetworkWatcherExtension'
+  name: '${domainControllerName}/AzureNetworkWatcherExtension'
   location: location
   properties: {
     publisher: 'Microsoft.Azure.NetworkWatcher'
@@ -181,7 +181,7 @@ resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensi
 }
 
 resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}-win2022/IaaSAntimalware'
+  name: '${domainControllerName}/IaaSAntimalware'
   location: location
   properties: {
     publisher: 'Microsoft.Azure.Security'
@@ -207,7 +207,7 @@ resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@
 }
 
 resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}-win2022/AzureMonitorWindowsAgent'
+  name: '${domainControllerName}/AzureMonitorWindowsAgent'
   location: location
   properties: {
     publisher: 'Microsoft.Azure.Monitor'
@@ -219,7 +219,7 @@ resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/ex
 }
 
 resource AADLoginExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}-win2022/AADLogin'
+  name: '${domainControllerName}/AADLogin'
   location: location
   properties: {
     publisher: 'Microsoft.Azure.ActiveDirectory'
