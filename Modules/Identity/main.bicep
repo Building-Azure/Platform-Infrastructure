@@ -8,6 +8,8 @@ param logAnalyticsWorkspaceName string
 param logAnalyticsResourceGroup string
 param hubVirtualNetworkName string
 param hubVirtualNetworkResourceGroup string
+param hqPrimaryDNSServerIP string
+param hqSecondaryDNSServerIP string
 // param nsgFlowLogsStorageAccountName string
 // param nsgFlowLogsStorageAccountResourceGroup string
 
@@ -72,6 +74,12 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'identity-virtualnetwork-${location}'
   location: location
   properties: {
+    dhcpOptions: {
+      dnsServers: [
+        '${hqPrimaryDNSServerIP}'
+        '${hqSecondaryDNSServerIP}'
+      ]
+    }
     addressSpace: {
       addressPrefixes: [
         '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.1.0/24' // Interpolating the first and second octet from the array
