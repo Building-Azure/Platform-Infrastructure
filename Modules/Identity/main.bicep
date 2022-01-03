@@ -14,6 +14,17 @@ param hubVirtualNetworkName string
 param hubVirtualNetworkResourceGroup string
 param hqPrimaryDNSServerIP string
 param hqSecondaryDNSServerIP string
+
+@secure()
+param domainJoinUsername string
+
+@secure()
+param domainJoinPassword string
+
+param domainFQDN string
+
+param orgUnitPath string
+
 // param nsgFlowLogsStorageAccountName string
 // param nsgFlowLogsStorageAccountResourceGroup string
 
@@ -219,6 +230,27 @@ resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/ex
     typeHandlerVersion: '1.0'
     autoUpgradeMinorVersion: true
     settings: {}
+  }
+}
+
+resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: '${domainControllerName}/joindomain'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Compute'
+    type: 'JsonADDomainExtension'
+    typeHandlerVersion: '1.3'
+    autoUpgradeMinorVersion: true
+    settings: {
+      Name: domainFQDN
+      User: domainJoinUsername
+      Restart: 'true'
+      Options: 3
+      OUPATH: orgUnitPath
+    }
+    protectedSettings: {
+      Password: domainJoinPassword
+    }
   }
 }
 

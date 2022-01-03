@@ -17,6 +17,10 @@ param domainJoinUsername string
 @secure()
 param domainJoinPassword string
 
+param domainFQDN string = 'buildingazure.co.uk'
+
+param orgUnitPath string = 'OU=AZURE,DC=BUILDINGAZURE,DC=CO,DC=UK'
+
 param hqPrimaryDNSServerIP string = '192.168.1.40'
 
 param hqSecondaryDNSServerIP string = '192.168.1.41'
@@ -181,6 +185,10 @@ module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in a
     // nsgFlowLogsStorageAccountResourceGroup: networkWatcherRG.name
     hqPrimaryDNSServerIP: hqPrimaryDNSServerIP
     hqSecondaryDNSServerIP: hqSecondaryDNSServerIP
+    domainFQDN: domainFQDN
+    domainJoinPassword: domainJoinPassword
+    domainJoinUsername: domainJoinUsername
+    orgUnitPath: orgUnitPath
   }
 }]
 
