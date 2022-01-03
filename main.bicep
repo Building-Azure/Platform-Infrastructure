@@ -177,7 +177,7 @@ module dnsZoneModule 'Modules/Private-DNS-Zones/main.bicep' = [for (dnsZone, i) 
   scope: privateDNSZoneRG
   params: {
     azureRegions : azureRegions
-    dnsZoneName: dnsZone[i]
+    dnsZoneName: dnsZone
   }
 }]
 
