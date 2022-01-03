@@ -43,7 +43,7 @@ resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' existing 
 }
 
 resource nsgFlowLog 'Microsoft.Network/networkWatchers/flowLogs@2021-05-01' = {
-  name: '${location}/${dcSubnetNetworkSecurityGroup.name}'
+  name: '${networkWatcher.name}/${dcSubnetNetworkSecurityGroup.name}'
   location: location
   properties: {
     enabled: true
