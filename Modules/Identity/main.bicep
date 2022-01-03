@@ -15,8 +15,8 @@ param hubVirtualNetworkResourceGroup string
 param hqPrimaryDNSServerIP string
 param hqSecondaryDNSServerIP string
 
-@secure()
-param domainJoinUsername string
+// @secure()
+// param domainJoinUsername string
 
 @secure()
 param domainJoinPassword string
@@ -243,7 +243,7 @@ resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/e
     autoUpgradeMinorVersion: true
     settings: {
       Name: domainFQDN
-      User: domainJoinUsername
+      User: 'administrator@buildingazure.co.uk'
       Restart: 'true'
       Options: 3
       OUPATH: orgUnitPath

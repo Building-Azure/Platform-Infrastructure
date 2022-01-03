@@ -187,7 +187,7 @@ module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in a
     hqSecondaryDNSServerIP: hqSecondaryDNSServerIP
     domainFQDN: domainFQDN
     domainJoinPassword: domainJoinPassword
-    domainJoinUsername: domainJoinUsername
+    // domainJoinUsername: domainJoinUsername
     orgUnitPath: orgUnitPath
   }
 }]
