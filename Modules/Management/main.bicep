@@ -45,6 +45,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
     enabledForDeployment: true
     enabledForTemplateDeployment: true
     enabledForDiskEncryption: true
+    enableRbacAuthorization: true
     tenantId: tenant().tenantId
     accessPolicies: []
     sku: {
