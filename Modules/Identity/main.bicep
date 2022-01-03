@@ -218,6 +218,18 @@ resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/ex
   }
 }
 
+resource AADLoginExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: '${domainControllerName}-win2022/AADLogin'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Azure.ActiveDirectory'
+    type: 'AADLoginForWindows'
+    typeHandlerVersion: '1.0'
+    autoUpgradeMinorVersion: true
+    settings: {}
+  }
+}
+
 // resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
 //   name: '${domainControllerName}-win2022/Microsoft.Insights.LogAnalyticsAgent'
 //   location: location
