@@ -15,8 +15,8 @@ param hubVirtualNetworkResourceGroup string
 param hqPrimaryDNSServerIP string
 param hqSecondaryDNSServerIP string
 
-// @secure()
-// param domainJoinUsername string
+@secure()
+param domainJoinUsername string
 
 @secure()
 param domainJoinPassword string
@@ -243,7 +243,7 @@ resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/e
     autoUpgradeMinorVersion: true
     settings: {
       Name: domainFQDN
-      User: 'administrator@buildingazure.co.uk'
+      User: '${domainJoinUsername}@${domainFQDN}'
       Restart: 'true'
       Options: 3
       OUPATH: orgUnitPath
@@ -267,7 +267,7 @@ resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/e
 // }
 
 // resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-//   name: '${domainControllerName}-win2022/Microsoft.Insights.LogAnalyticsAgent'
+//   name: '${domainControllerName}/Microsoft.Insights.LogAnalyticsAgent'
 //   location: location
 //   properties: {
 //     publisher: 'Microsoft.EnterpriseCloud.Monitoring'
@@ -278,7 +278,7 @@ resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/e
 //       workspaceId: logAnalyticsWorkspace.id
 //     }
 //     protectedSettings: {
-//       workspaceKey: logAnalyticsWorkspace.listKeys().primarySharedKey
+//       workspaceKey: logAnalyticsWorkspace.listKeyValue().primarySharedKey
 //     }
 //   }
 // }

@@ -74,4 +74,4 @@ resource keyVaultSecretDomainJoinPassword 'Microsoft.KeyVault/vaults/secrets@201
 
 
 output logAnalyticsWorkspaceName string = logAnalyticsWorkspace.name
-
+output logAnalyticsWorkspaceprimaryKey string = logAnalyticsWorkspace.listKeys()
