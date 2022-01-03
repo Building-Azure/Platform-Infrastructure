@@ -173,7 +173,7 @@ module hubPeeringModule 'Modules/Hub-Peering/main.bicep' = [for (azureRegion, i)
 }]
 
 module dnsZoneModule 'Modules/Private-DNS-Zones/main.bicep' = [for (dnsZone, i) in dnsZones: {
-  name: 'privateDNSZoneModule-${dnsZone[i]}'
+  name: 'privateDNSZoneModule-${dnsZone}'
   scope: privateDNSZoneRG
   params: {
     azureRegions : azureRegions
