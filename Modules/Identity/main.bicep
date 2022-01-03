@@ -283,6 +283,9 @@ resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/e
 //   }
 // }
 
+//TODO Add the Azure Diagnostics Extension from https://docs.microsoft.com/en-us/azure/azure-monitor/agents/resource-manager-agent#diagnostic-extension
+
+
 resource identitySpokePeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
   name: '${virtualNetwork.name}/hub'
   properties: {

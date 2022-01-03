@@ -42,20 +42,20 @@ param azureRegions array = [
     hqLocalAddressPrefix: '192.168.1.0/24'
     domainControllerName: 'dc04'
   }
-  {
-    region: 'eastus'
-    addressSpace: '10.102.0.0'
-    hqPublicIPAddress: '185.116.112.220'
-    hqLocalAddressPrefix: '192.168.1.0/24'
-    domainControllerName: 'dc05'
-  }
-  {
-    region: 'westus'
-    addressSpace: '10.103.0.0'
-    hqPublicIPAddress: '185.116.112.220'
-    hqLocalAddressPrefix: '192.168.1.0/24'
-    domainControllerName: 'dc06'
-  }
+  // {
+  //   region: 'eastus'
+  //   addressSpace: '10.102.0.0'
+  //   hqPublicIPAddress: '185.116.112.220'
+  //   hqLocalAddressPrefix: '192.168.1.0/24'
+  //   domainControllerName: 'dc05'
+  // }
+  // {
+  //   region: 'westus'
+  //   addressSpace: '10.103.0.0'
+  //   hqPublicIPAddress: '185.116.112.220'
+  //   hqLocalAddressPrefix: '192.168.1.0/24'
+  //   domainControllerName: 'dc06'
+  // }
 ]
 
 param dnsZones array = [
