@@ -8,8 +8,8 @@ param logAnalyticsWorkspaceName string
 param logAnalyticsResourceGroup string
 param hubVirtualNetworkName string
 param hubVirtualNetworkResourceGroup string
-param nsgFlowLogsStorageAccountName string
-param nsgFlowLogsStorageAccountResourceGroup string
+// param nsgFlowLogsStorageAccountName string
+// param nsgFlowLogsStorageAccountResourceGroup string
 
 // This should return an array of something like ['10', '100', '0', '0'] which makes it easier to use for subnetting below
 var addressSpaceOctets = split(addressSpace, '.')
@@ -24,10 +24,10 @@ resource hubVirtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' existi
   scope: resourceGroup(hubVirtualNetworkResourceGroup)
 }
 
-resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' existing = {
-  name: nsgFlowLogsStorageAccountName
-  scope: resourceGroup(nsgFlowLogsStorageAccountResourceGroup)
-}
+// resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' existing = {
+//   name: nsgFlowLogsStorageAccountName
+//   scope: resourceGroup(nsgFlowLogsStorageAccountResourceGroup)
+// }
 
 resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
   name: 'dc-subnet-nsg-${location}'
@@ -37,35 +37,36 @@ resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2
   }
 }
 
-resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' existing = {
-  name: location
-  scope: resourceGroup('platform-networkwatcher')
-}
+// resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' existing = {
+//   name: location
+//   scope: resourceGroup('platform-networkwatcher')
+// }
 
-resource nsgFlowLog 'Microsoft.Network/networkWatchers/flowLogs@2021-05-01' = {
-  name: '${networkWatcher.name}/${dcSubnetNetworkSecurityGroup.name}'
-  location: location
-  properties: {
-    enabled: true
-    flowAnalyticsConfiguration: {
-      networkWatcherFlowAnalyticsConfiguration: {
-        enabled: true
-        trafficAnalyticsInterval: 60
-        workspaceResourceId: logAnalyticsWorkspace.id
-      }
-    }
-    format: {
-      type: 'JSON'
-      version: 2
-    }
-    retentionPolicy: {
-      days: 60
-      enabled: true
-    }
-    storageId: nsgFlowLogsStorageAccount.id
-    targetResourceId: dcSubnetNetworkSecurityGroup.id
-  }
-}
+// resource nsgFlowLog 'Microsoft.Network/networkWatchers/flowLogs@2021-05-01' = {
+//   name: '${networkWatcher.name}/${dcSubnetNetworkSecurityGroup.name}'
+//   location: location
+  
+//   properties: {
+//     enabled: true
+//     flowAnalyticsConfiguration: {
+//       networkWatcherFlowAnalyticsConfiguration: {
+//         enabled: true
+//         trafficAnalyticsInterval: 60
+//         workspaceResourceId: logAnalyticsWorkspace.id
+//       }
+//     }
+//     format: {
+//       type: 'JSON'
+//       version: 2
+//     }
+//     retentionPolicy: {
+//       days: 60
+//       enabled: true
+//     }
+//     storageId: nsgFlowLogsStorageAccount.id
+//     targetResourceId: dcSubnetNetworkSecurityGroup.id
+//   }
+// }
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'identity-virtualnetwork-${location}'

@@ -159,8 +159,8 @@ module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in a
     logAnalyticsResourceGroup: managementRG.name
     hubVirtualNetworkName: connectivityModule[i].outputs.hubVirtualNetworkName
     hubVirtualNetworkResourceGroup: connectivityRG[i].name
-    nsgFlowLogsStorageAccountName: networkWatcher[i].outputs.nsgFlowLogsStorageAccountName
-    nsgFlowLogsStorageAccountResourceGroup: networkWatcherRG.name
+    // nsgFlowLogsStorageAccountName: networkWatcher[i].outputs.nsgFlowLogsStorageAccountName
+    // nsgFlowLogsStorageAccountResourceGroup: networkWatcherRG.name
   }
 }]
 
