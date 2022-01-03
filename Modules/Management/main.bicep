@@ -1,5 +1,11 @@
 param location string = 'westeurope'
 
+@secure()
+param domainJoinUsername string
+
+@secure()
+param domainJoinPassword string
+
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: 'platform-law'
   location: location
@@ -31,6 +37,40 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
     'usage' : 'Azure Cloud Shell'
   }
 }
+
+resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
+  name: 'bldazureplatform'
+  location: location
+  properties: {
+    enabledForDeployment: true
+    enabledForTemplateDeployment: true
+    enabledForDiskEncryption: true
+    tenantId: tenant().tenantId
+    accessPolicies: []
+    sku: {
+      name: 'standard'
+      family: 'A'
+    }
+  }
+}
+
+resource keyVaultSecretDomainJoinUsername 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
+  parent: keyVault
+  name: 'domainJoinUsername'
+  properties: {
+    value: domainJoinUsername
+  }
+}
+
+resource keyVaultSecretDomainJoinPassword 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
+  parent: keyVault
+  name: 'domainJoinPassword'
+  properties: {
+    value: domainJoinPassword
+  }
+}
+
+
 
 output logAnalyticsWorkspaceName string = logAnalyticsWorkspace.name
 

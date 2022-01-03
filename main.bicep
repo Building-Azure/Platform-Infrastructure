@@ -1,10 +1,24 @@
 targetScope = 'subscription'
 
 param companyPrefix string = 'platform'
+
+@secure()
 param preSharedKey string
+
+@secure()
 param adminUsername string
+
+@secure()
 param adminPassword string
+
+@secure()
+param domainJoinUsername string
+
+@secure()
+param domainJoinPassword string
+
 param hqPrimaryDNSServerIP string = '192.168.1.40'
+
 param hqSecondaryDNSServerIP string = '192.168.1.41'
 
 // Enter the Azure Regions you wish to use. This will deploy things like a networking hub and active directory domain controller VM into each region. Certain resources like Log Analytics Workspace will be only deployed into a single region - selected from the first element of this array
@@ -125,6 +139,8 @@ module managementModule 'Modules/Management/main.bicep' = {
   scope: managementRG
   params: {
     location: azureRegions[0].region
+    domainJoinUsername: domainJoinUsername
+    domainJoinPassword:domainJoinPassword
   }
 }
 
