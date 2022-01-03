@@ -7,7 +7,7 @@ resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' = {
 }
 
 resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
-  name: 'nsgfl${location}'
+  name: '${location}${uniqueString(resourceGroup().id)}'
   location: location
   kind: 'StorageV2'
   sku: {
