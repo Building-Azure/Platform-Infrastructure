@@ -27,22 +27,7 @@ resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2
   name: 'dc-subnet-nsg'
   location: location
   properties: {
-    securityRules: [
-      {
-        name: 'allowAll'
-        properties: {
-          description: 'description'
-          protocol: 'Tcp'
-          sourcePortRange: '*'
-          destinationPortRange: '*'
-          sourceAddressPrefix: '*'
-          destinationAddressPrefix: '*'
-          access: 'Allow'
-          priority: 100
-          direction: 'Inbound'
-        }
-      }
-    ]
+    securityRules: []
   }
 }
 
@@ -74,7 +59,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 }
 
 resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'dc01-nic'
+  name: '${domainControllerName}-nic'
   location: location
   properties: {
     ipConfigurations: [
