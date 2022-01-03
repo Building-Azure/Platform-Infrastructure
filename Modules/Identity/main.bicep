@@ -30,15 +30,20 @@ resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01
 }
 
 resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
-  name: 'dc-subnet-nsg'
+  name: 'dc-subnet-nsg-${location}'
   location: location
   properties: {
     securityRules: []
   }
 }
 
+resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' existing = {
+  name: location
+  scope: resourceGroup('platform-networkwatcher')
+}
+
 resource nsgFlowLog 'Microsoft.Network/networkWatchers/flowLogs@2021-05-01' = {
-  name: 'dc-subnet-nsg/flowlog'
+  name: '${location}/${dcSubnetNetworkSecurityGroup.name}'
   location: location
   properties: {
     enabled: true

@@ -13,28 +13,28 @@ param azureRegions array = [
     addressSpace: '10.100.0.0'
     hqPublicIPAddress: '185.116.112.220'
     hqLocalAddressPrefix: '192.168.1.0/24'
-    domainControllerName: 'dc01'
+    domainControllerName: 'dc03'
   }
   {
     region: 'northeurope'
     addressSpace: '10.101.0.0'
     hqPublicIPAddress: '185.116.112.220'
     hqLocalAddressPrefix: '192.168.1.0/24'
-    domainControllerName: 'dc02'
+    domainControllerName: 'dc04'
   }
   {
     region: 'eastus'
     addressSpace: '10.102.0.0'
     hqPublicIPAddress: '185.116.112.220'
     hqLocalAddressPrefix: '192.168.1.0/24'
-    domainControllerName: 'dc03'
+    domainControllerName: 'dc05'
   }
   {
     region: 'westus'
     addressSpace: '10.103.0.0'
     hqPublicIPAddress: '185.116.112.220'
     hqLocalAddressPrefix: '192.168.1.0/24'
-    domainControllerName: 'dc04'
+    domainControllerName: 'dc06'
   }
 ]
 
@@ -159,8 +159,8 @@ module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in a
     logAnalyticsResourceGroup: managementRG.name
     hubVirtualNetworkName: connectivityModule[i].outputs.hubVirtualNetworkName
     hubVirtualNetworkResourceGroup: connectivityRG[i].name
-    nsgFlowLogsStorageAccountName: managementModule.outputs.nsgFlowLogsStorageAccountName
-    nsgFlowLogsStorageAccountResourceGroup: managementRG.name
+    nsgFlowLogsStorageAccountName: networkWatcher[i].outputs.nsgFlowLogsStorageAccountName
+    nsgFlowLogsStorageAccountResourceGroup: networkWatcherRG.name
   }
 }]
 

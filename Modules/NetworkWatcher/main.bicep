@@ -5,3 +5,17 @@ resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' = {
   name: location
   location: location
 }
+
+resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: 'nsgfl${location}'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Premium_LRS'
+  }
+  tags: {
+    'usage' : 'NSG Flow Logs'
+  }
+}
+
+output nsgFlowLogsStorageAccountName string = nsgFlowLogsStorageAccount.name
