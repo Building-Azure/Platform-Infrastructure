@@ -1,15 +1,22 @@
 // Check back for update or new urls at: https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns#azure-services-dns-zone-configuration
 var dnsZones = [
   'privatelink.azure-automation.net'
+#disable-next-line no-hardcoded-env-urls
   'privatelink.database.windows.net'
   'privatelink.sql.azuresynapse.net'
   'privatelink.dev.azuresynapse.net'
   'privatelink.azuresynapse.net'
+#disable-next-line no-hardcoded-env-urls
   'privatelink.blob.core.windows.net'
+#disable-next-line no-hardcoded-env-urls
   'privatelink.table.core.windows.net'
+#disable-next-line no-hardcoded-env-urls
   'privatelink.queue.core.windows.net'
+#disable-next-line no-hardcoded-env-urls
   'privatelink.file.core.windows.net'
+#disable-next-line no-hardcoded-env-urls
   'privatelink.web.core.windows.net'
+#disable-next-line no-hardcoded-env-urls
   'privatelink.dfs.core.windows.net'
   'privatelink.documents.azure.com'
   'privatelink.mongo.cosmos.azure.com'
