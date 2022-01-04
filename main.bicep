@@ -42,60 +42,60 @@ param azureRegions array = [
   }
 ]
 
-// param dnsZones array = [
-//   'privatelink.azure-automation.net'
-//   #disable-next-line no-hardcoded-env-urls
-//   'privatelink.database.windows.net'
-//   'privatelink.sql.azuresynapse.net'
-//   'privatelink.dev.azuresynapse.net'
-//   'privatelink.azuresynapse.net'
-//   #disable-next-line no-hardcoded-env-urls
-//   'privatelink.blob.core.windows.net'
-//   #disable-next-line no-hardcoded-env-urls
-//   'privatelink.table.core.windows.net'
-//   #disable-next-line no-hardcoded-env-urls
-//   'privatelink.queue.core.windows.net'
-//   #disable-next-line no-hardcoded-env-urls
-//   'privatelink.file.core.windows.net'
-//   #disable-next-line no-hardcoded-env-urls
-//   'privatelink.web.core.windows.net'
-//   #disable-next-line no-hardcoded-env-urls
-//   'privatelink.dfs.core.windows.net'
-//   'privatelink.documents.azure.com'
-//   'privatelink.mongo.cosmos.azure.com'
-//   'privatelink.cassandra.cosmos.azure.com'
-//   'privatelink.gremlin.cosmos.azure.com'
-//   'privatelink.table.cosmos.azure.com'
-//   'privatelink.postgres.database.azure.com'
-//   'privatelink.mysql.database.azure.com'
-//   'privatelink.mariadb.database.azure.com'
-//   'privatelink.vaultcore.azure.net'
-//   'privatelink.search.windows.net'
-//   'privatelink.azurecr.io'
-//   'privatelink.azconfig.io'
-//   'privatelink.siterecovery.windowsazure.com'
-//   'privatelink.servicebus.windows.net'
-//   'privatelink.azure-devices.net'
-//   'privatelink.eventgrid.azure.net'
-//   'privatelink.azurewebsites.net'
-//   'privatelink.api.azureml.ms'
-//   'privatelink.notebooks.azure.net'
-//   'privatelink.service.signalr.net'
-//   'privatelink.monitor.azure.com'
-//   'privatelink.oms.opinsights.azure.com'
-//   'privatelink.ods.opinsights.azure.com'
-//   'privatelink.agentsvc.azure-automation.net'
-//   'privatelink.cognitiveservices.azure.com'
-//   'privatelink.afs.azure.net'
-//   'privatelink.datafactory.azure.net'
-//   'privatelink.adf.azure.com'
-//   'privatelink.redis.cache.windows.net'
-//   'privatelink.redisenterprise.cache.azure.net'
-//   'privatelink.purview.azure.com'
-//   'privatelink.purviewstudio.azure.com'
-//   'privatelink.digitaltwins.azure.net'
-//   'privatelink.azurehdinsight.net'
-// ]
+param dnsZones array = [
+  'privatelink.azure-automation.net'
+  #disable-next-line no-hardcoded-env-urls
+  'privatelink.database.windows.net'
+  'privatelink.sql.azuresynapse.net'
+  'privatelink.dev.azuresynapse.net'
+  'privatelink.azuresynapse.net'
+  #disable-next-line no-hardcoded-env-urls
+  'privatelink.blob.core.windows.net'
+  #disable-next-line no-hardcoded-env-urls
+  'privatelink.table.core.windows.net'
+  #disable-next-line no-hardcoded-env-urls
+  'privatelink.queue.core.windows.net'
+  #disable-next-line no-hardcoded-env-urls
+  'privatelink.file.core.windows.net'
+  #disable-next-line no-hardcoded-env-urls
+  'privatelink.web.core.windows.net'
+  #disable-next-line no-hardcoded-env-urls
+  'privatelink.dfs.core.windows.net'
+  'privatelink.documents.azure.com'
+  'privatelink.mongo.cosmos.azure.com'
+  'privatelink.cassandra.cosmos.azure.com'
+  'privatelink.gremlin.cosmos.azure.com'
+  'privatelink.table.cosmos.azure.com'
+  'privatelink.postgres.database.azure.com'
+  'privatelink.mysql.database.azure.com'
+  'privatelink.mariadb.database.azure.com'
+  'privatelink.vaultcore.azure.net'
+  'privatelink.search.windows.net'
+  'privatelink.azurecr.io'
+  'privatelink.azconfig.io'
+  'privatelink.siterecovery.windowsazure.com'
+  'privatelink.servicebus.windows.net'
+  'privatelink.azure-devices.net'
+  'privatelink.eventgrid.azure.net'
+  'privatelink.azurewebsites.net'
+  'privatelink.api.azureml.ms'
+  'privatelink.notebooks.azure.net'
+  'privatelink.service.signalr.net'
+  'privatelink.monitor.azure.com'
+  'privatelink.oms.opinsights.azure.com'
+  'privatelink.ods.opinsights.azure.com'
+  'privatelink.agentsvc.azure-automation.net'
+  'privatelink.cognitiveservices.azure.com'
+  'privatelink.afs.azure.net'
+  'privatelink.datafactory.azure.net'
+  'privatelink.adf.azure.com'
+  'privatelink.redis.cache.windows.net'
+  'privatelink.redisenterprise.cache.azure.net'
+  'privatelink.purview.azure.com'
+  'privatelink.purviewstudio.azure.com'
+  'privatelink.digitaltwins.azure.net'
+  'privatelink.azurehdinsight.net'
+]
 resource hubNetworkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
   name: '${companyPrefix}-connectivity-${azureRegion.region}'
   location: azureRegion.region
@@ -106,20 +106,20 @@ resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azure
   location: azureRegion.region
 }]
 
-// resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-//   name: '${companyPrefix}-management'
-//   location: azureRegions[0].region
-// }
+resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: '${companyPrefix}-management'
+  location: azureRegions[0].region
+}
 
 // resource networkWatcherRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 //   name: '${companyPrefix}-networkwatcher'
 //   location: azureRegions[0].region
 // }
 
-// resource privateDNSZoneRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-//   name: '${companyPrefix}-privatednszones'
-//   location: azureRegions[0].region
-// }
+resource privateDNSZoneRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: '${companyPrefix}-privatednszones'
+  location: azureRegions[0].region
+}
 
 // module managementModule 'Modules/Management/main.bicep' = {
 //   name: 'managementModule'
@@ -208,16 +208,16 @@ module spokeToHubPeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [fo
 //   }
 // }]
 
-// module dnsZoneModule 'Modules/Private-DNS-Zones/main.bicep' = [for (dnsZone, i) in dnsZones: {
-//   name: 'privateDNSZoneModule-${dnsZone}'
-//   scope: privateDNSZoneRG
+module dnsZoneModule 'Modules/Private-DNS-Zones/main.bicep' = [for (dnsZone, i) in dnsZones: {
+  name: 'privateDNSZoneModule-${dnsZone}'
+  scope: privateDNSZoneRG
   
-//   //TODO: I should remove this explicit dependency once I sort out the hardcoding inside the dnsZoneModule for Identity
-//   dependsOn: [
-//     identityModule
-//   ]
-//   params: {
-//     azureRegions: azureRegions
-//     dnsZoneName: dnsZone
-//   }
-// }]
+  //TODO: I should remove this explicit dependency once I sort out the hardcoding inside the dnsZoneModule for Identity
+  dependsOn: [
+    identityNetworkingModule
+  ]
+  params: {
+    azureRegions: azureRegions
+    dnsZoneName: dnsZone
+  }
+}]
