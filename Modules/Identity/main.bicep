@@ -93,6 +93,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       dnsServers: [
         '${hqPrimaryDNSServerIP}'
         '${hqSecondaryDNSServerIP}'
+        '168.63.129.16'
       ]
     }
     addressSpace: {
