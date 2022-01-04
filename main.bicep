@@ -5,21 +5,21 @@ param companyPrefix string = 'platform'
 @secure()
 param preSharedKey string
 
-// @secure()
-// param adminUsername string
+@secure()
+param adminUsername string
 
-// @secure()
-// param adminPassword string
+@secure()
+param adminPassword string
 
-// @secure()
-// param domainJoinUsername string
+@secure()
+param domainJoinUsername string
 
-// @secure()
-// param domainJoinPassword string
+@secure()
+param domainJoinPassword string
 
-// param domainFQDN string = 'buildingazure.co.uk'
+param domainFQDN string = 'buildingazure.co.uk'
 
-// param orgUnitPath string = 'OU=AZURE,DC=BUILDINGAZURE,DC=CO,DC=UK'
+param orgUnitPath string = 'OU=AZURE,DC=BUILDINGAZURE,DC=CO,DC=UK'
 
 param hqPrimaryDNSServerIP string = '192.168.1.40'
 param hqSecondaryDNSServerIP string = '192.168.1.41'
@@ -111,33 +111,33 @@ resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: azureRegions[0].region
 }
 
-// resource networkWatcherRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-//   name: '${companyPrefix}-networkwatcher'
-//   location: azureRegions[0].region
-// }
+resource networkWatcherRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: '${companyPrefix}-networkwatcher'
+  location: azureRegions[0].region
+}
 
 resource privateDNSZoneRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${companyPrefix}-privatednszones'
   location: azureRegions[0].region
 }
 
-// module managementModule 'Modules/Management/main.bicep' = {
-//   name: 'managementModule'
-//   scope: managementRG
-//   params: {
-//     location: azureRegions[0].region
-//     domainJoinUsername: domainJoinUsername
-//     domainJoinPassword: domainJoinPassword
-//   }
-// }
+module managementModule 'Modules/Management/main.bicep' = {
+  name: 'managementModule'
+  scope: managementRG
+  params: {
+    location: azureRegions[0].region
+    domainJoinUsername: domainJoinUsername
+    domainJoinPassword: domainJoinPassword
+  }
+}
 
-// module networkWatcher 'Modules/NetworkWatcher/main.bicep' = [for azureRegion in azureRegions: {
-//   name: 'networkWatcherModule-${azureRegion.region}'
-//   scope: networkWatcherRG
-//   params: {
-//     location: azureRegion.region
-//   }
-// }]
+module networkWatcher 'Modules/NetworkWatcher/main.bicep' = [for azureRegion in azureRegions: {
+  name: 'networkWatcherModule-${azureRegion.region}'
+  scope: networkWatcherRG
+  params: {
+    location: azureRegion.region
+  }
+}]
 
 module hubNetworkingModule 'Modules/Hub-Networking/main.bicep' = [for (azureRegion, i) in azureRegions: {
   name: 'hubNetworkingModule-${azureRegion.region}'
@@ -177,36 +177,35 @@ module spokeToHubPeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [fo
   name: 'hubPeeringModule-${azureRegion.region}'
   scope: identityRG[i]
   params: {
-    useRemoteGateways: false
+    useRemoteGateways: true
     remoteVirtualNetworkID: hubNetworkingModule[i].outputs.hubVirtualNetworkId
     remotePeerName: 'Hub'
     localVirtualNetworkName: identityNetworkingModule[i].outputs.identityVirtualNetworkName
   }
 }]
 
-// module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in azureRegions: {
-//   name: 'identityModule-${azureRegion.region}'
-//   scope: identityRG[i]
-//   params: {
-//     location: azureRegion.region
-//     addressSpace: azureRegion.addressSpace
-//     adminUsername: adminUsername
-//     adminPassword: adminPassword
-//     domainControllerName: azureRegion.domainControllerName
-//     logAnalyticsWorkspaceName: managementModule.outputs.logAnalyticsWorkspaceName
-//     logAnalyticsResourceGroup: managementRG.name
-//     hubVirtualNetworkName: connectivityModule[i].outputs.hubVirtualNetworkName
-//     hubVirtualNetworkResourceGroup: connectivityRG[i].name
-//     // nsgFlowLogsStorageAccountName: networkWatcher[i].outputs.nsgFlowLogsStorageAccountName
-//     // nsgFlowLogsStorageAccountResourceGroup: networkWatcherRG.name
-//     hqPrimaryDNSServerIP: hqPrimaryDNSServerIP
-//     hqSecondaryDNSServerIP: hqSecondaryDNSServerIP
-//     // domainFQDN: domainFQDN
-//     // domainJoinPassword: domainJoinPassword
-//     // domainJoinUsername: domainJoinUsername
-//     // orgUnitPath: orgUnitPath
-//   }
-// }]
+module identityModule 'Modules/Identity-DomainControllers/main.bicep' = [for (azureRegion, i) in azureRegions: {
+  name: 'identityModule-${azureRegion.region}'
+  scope: identityRG[i]
+  dependsOn: [
+    spokeToHubPeeringModule
+    hubToSpokePeeringModule
+  ]
+  params: {
+    location: azureRegion.region
+    addressSpace: azureRegion.addressSpace
+    adminUsername: adminUsername
+    adminPassword: adminPassword
+    domainControllerName: azureRegion.domainControllerName
+    logAnalyticsWorkspaceName: managementModule.outputs.logAnalyticsWorkspaceName
+    logAnalyticsResourceGroup: managementRG.name
+    domainFQDN: domainFQDN
+    domainJoinPassword: domainJoinPassword
+    domainJoinUsername: domainJoinUsername
+    orgUnitPath: orgUnitPath
+    domainControllerSubnetId: identityNetworkingModule[i].outputs.domainControllerSubnetId
+  }
+}]
 
 module dnsZoneModule 'Modules/Private-DNS-Zones/main.bicep' = [for (dnsZone, i) in dnsZones: {
   name: 'privateDNSZoneModule-${dnsZone}'

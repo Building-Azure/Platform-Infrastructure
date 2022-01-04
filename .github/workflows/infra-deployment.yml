@@ -33,7 +33,7 @@ jobs:
         region:  westeurope
         template: ./main.bicep
         deploymentName: 'Github-Actions'
-        parameters: preSharedKey=${{ secrets.PRESHARED_KEY }} #adminPassword=${{ secrets.ADMIN_PASSWORD}} adminUsername=${{ secrets.ADMIN_USERNAME }} domainJoinUsername=${{ secrets.DOMAINJOIN_USERNAME }} domainJoinPassword=${{ secrets.DOMAINJOIN_PASSWORD }}
+        parameters: preSharedKey=${{ secrets.PRESHARED_KEY }} adminPassword=${{ secrets.ADMIN_PASSWORD}} adminUsername=${{ secrets.ADMIN_USERNAME }} domainJoinUsername=${{ secrets.DOMAINJOIN_USERNAME }} domainJoinPassword=${{ secrets.DOMAINJOIN_PASSWORD }}
         failOnStdErr: false
 
   # Connectivity:

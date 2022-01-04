@@ -50,3 +50,4 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 
 output identityVirtualNetworkId string = virtualNetwork.id
 output identityVirtualNetworkName string = virtualNetwork.name
+output domainControllerSubnetId string = virtualNetwork::domainControllerSubnet.id

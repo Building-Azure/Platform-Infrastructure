@@ -1,32 +1,20 @@
-param location string
-
+@secure()
+param domainJoinPassword string
 @secure()
 param adminUsername string
-
 @secure()
 param adminPassword string
+@secure()
+param domainJoinUsername string
 
 param domainControllerName string
 param addressSpace string
 param logAnalyticsWorkspaceName string
 param logAnalyticsResourceGroup string
-param hubVirtualNetworkName string
-param hubVirtualNetworkResourceGroup string
-param hqPrimaryDNSServerIP string
-param hqSecondaryDNSServerIP string
-
-// @secure()
-// param domainJoinUsername string
-
-// @secure()
-// param domainJoinPassword string
-
-// param domainFQDN string
-
-// param orgUnitPath string
-
-// param nsgFlowLogsStorageAccountName string
-// param nsgFlowLogsStorageAccountResourceGroup string
+param domainControllerSubnetId string
+param domainFQDN string
+param orgUnitPath string
+param location string
 
 // This should return an array of something like ['10', '100', '0', '0'] which makes it easier to use for subnetting below
 var addressSpaceOctets = split(addressSpace, '.')
@@ -36,86 +24,11 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06
   scope: resourceGroup(logAnalyticsResourceGroup)
 }
 
-resource hubVirtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' existing = {
-  name: hubVirtualNetworkName
-  scope: resourceGroup(hubVirtualNetworkResourceGroup)
-}
-
-// resource nsgFlowLogsStorageAccount 'Microsoft.Storage/storageAccounts@2021-06-01' existing = {
-//   name: nsgFlowLogsStorageAccountName
-//   scope: resourceGroup(nsgFlowLogsStorageAccountResourceGroup)
-// }
-
 resource dcSubnetNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
   name: 'dc-subnet-nsg-${location}'
   location: location
   properties: {
     securityRules: []
-  }
-}
-
-// resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' existing = {
-//   name: location
-//   scope: resourceGroup('platform-networkwatcher')
-// }
-
-// resource nsgFlowLog 'Microsoft.Network/networkWatchers/flowLogs@2021-05-01' = {
-//   name: '${networkWatcher.name}/${dcSubnetNetworkSecurityGroup.name}'
-//   location: location
-  
-//   properties: {
-//     enabled: true
-//     flowAnalyticsConfiguration: {
-//       networkWatcherFlowAnalyticsConfiguration: {
-//         enabled: true
-//         trafficAnalyticsInterval: 60
-//         workspaceResourceId: logAnalyticsWorkspace.id
-//       }
-//     }
-//     format: {
-//       type: 'JSON'
-//       version: 2
-//     }
-//     retentionPolicy: {
-//       days: 60
-//       enabled: true
-//     }
-//     storageId: nsgFlowLogsStorageAccount.id
-//     targetResourceId: dcSubnetNetworkSecurityGroup.id
-//   }
-// }
-
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
-  name: 'identity-virtualnetwork-${location}'
-  location: location
-  properties: {
-    dhcpOptions: {
-      dnsServers: [
-        '${hqPrimaryDNSServerIP}'
-        '${hqSecondaryDNSServerIP}'
-        '168.63.129.16' //Azure Provided DNS - without this, Log Analytics won't get data from Agents
-      ]
-    }
-    addressSpace: {
-      addressPrefixes: [
-        '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.1.0/24' // Interpolating the first and second octet from the array
-      ]
-    }
-    subnets: [
-      {
-        name: 'DomainControllerSubnet'
-        properties: {
-          addressPrefix: '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.1.0/28'
-          networkSecurityGroup: {
-            id: dcSubnetNetworkSecurityGroup.id
-          }
-        }
-      }
-    ]
-  }
-  //This creates a strongly typed reference so we can obtain the ID which is needed in the VNET Gateway resource
-  resource domainControllerSubnet 'subnets' existing = {
-    name: 'DomainControllerSubnet'
   }
 }
 
@@ -129,9 +42,9 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
         properties: {
           privateIPAllocationMethod: 'Static'
           subnet: {
-            id: virtualNetwork::domainControllerSubnet.id
+            id: domainControllerSubnetId
           }
-          privateIPAddress: '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.1.4'
+          privateIPAddress: '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.4.4'
         }
       }
     ]
@@ -224,6 +137,40 @@ resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@
   }
 }
 
+resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+  name: 'joindomain'
+  parent: windowsVM
+  location: location
+  properties: {
+    publisher: 'Microsoft.Compute'
+    type: 'JsonADDomainExtension'
+    typeHandlerVersion: '1.3'
+    autoUpgradeMinorVersion: true
+    settings: {
+      Name: domainFQDN
+      User: '${domainJoinUsername}@${domainFQDN}'
+      Restart: 'true'
+      Options: 3
+      OUPATH: orgUnitPath
+    }
+    protectedSettings: {
+      Password: domainJoinPassword
+    }
+  }
+}
+
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: 'vmdiag${uniqueString(resourceGroup().id)}'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_GRS'
+  }
+  tags: {
+    'usage': 'VM and Perf Diagnostics'
+  }
+}
+
 // resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
 //   name: 'AzureMonitorWindowsAgent'
 //   parent: windowsVM
@@ -236,33 +183,6 @@ resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@
 //     settings: {}
 //   }
 // }
-
-// resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-//   name: 'joindomain'
-//   parent: windowsVM
-//   location: location
-//   dependsOn: [
-//     identitySpokePeering
-//   ]
-//   properties: {
-//     publisher: 'Microsoft.Compute'
-//     type: 'JsonADDomainExtension'
-//     typeHandlerVersion: '1.3'
-//     autoUpgradeMinorVersion: true
-//     settings: {
-//       Name: domainFQDN
-//       User: '${domainJoinUsername}@${domainFQDN}'
-//       Restart: 'true'
-//       Options: 3
-//       OUPATH: orgUnitPath
-//     }
-//     protectedSettings: {
-//       Password: domainJoinPassword
-//     }
-//   }
-// }
-
-// The domain join extension fails on initial run because the networking has not completed so is unable to find the domain controllers at HQ
 
 // resource AADLoginExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
 //   name: 'AADLogin'
@@ -297,30 +217,4 @@ resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@
 
 //TODO Add the Azure Diagnostics Extension from https://docs.microsoft.com/en-us/azure/azure-monitor/agents/resource-manager-agent#diagnostic-extension
 
-resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
-  name: 'vmdiag${uniqueString(resourceGroup().id)}'
-  location: location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_GRS'
-  }
-  tags: {
-    'usage': 'VM and Perf Diagnostics'
-  }
-}
 
-
-resource identitySpokePeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
-  name: '${virtualNetwork.name}/hub'
-  properties: {
-    allowVirtualNetworkAccess: true
-    allowForwardedTraffic: true
-    allowGatewayTransit: true
-    useRemoteGateways: true
-    remoteVirtualNetwork: {
-      id: hubVirtualNetwork.id
-    }
-  }
-}
-
-output identityVirtualNetworkName string = virtualNetwork.name
