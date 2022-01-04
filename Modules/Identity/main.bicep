@@ -15,15 +15,15 @@ param hubVirtualNetworkResourceGroup string
 param hqPrimaryDNSServerIP string
 param hqSecondaryDNSServerIP string
 
-@secure()
-param domainJoinUsername string
+// @secure()
+// param domainJoinUsername string
 
-@secure()
-param domainJoinPassword string
+// @secure()
+// param domainJoinPassword string
 
-param domainFQDN string
+// param domainFQDN string
 
-param orgUnitPath string
+// param orgUnitPath string
 
 // param nsgFlowLogsStorageAccountName string
 // param nsgFlowLogsStorageAccountResourceGroup string
