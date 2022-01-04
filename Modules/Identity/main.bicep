@@ -147,7 +147,7 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2021-07-01' = {
       vmSize: 'Standard_B2s'
     }
     osProfile: {
-      computerName: domainControllerName
+      computerName: toUpper(domainControllerName)
       adminUsername: adminUsername
       adminPassword: adminPassword
       windowsConfiguration: {
