@@ -297,6 +297,18 @@ resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@
 
 //TODO Add the Azure Diagnostics Extension from https://docs.microsoft.com/en-us/azure/azure-monitor/agents/resource-manager-agent#diagnostic-extension
 
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
+  name: 'vmdiag${uniqueString(resourceGroup().id)}'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Premium_LRS'
+  }
+  tags: {
+    'usage': 'VM and Perf Diagnostics'
+  }
+}
+
 
 resource identitySpokePeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2021-05-01' = {
   name: '${virtualNetwork.name}/hub'
