@@ -111,11 +111,6 @@ resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: azureRegions[0].region
 }
 
-resource networkWatcherRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${companyPrefix}-networkwatcher'
-  location: azureRegions[0].region
-}
-
 resource privateDNSZoneRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${companyPrefix}-privatednszones'
   location: azureRegions[0].region
@@ -133,7 +128,7 @@ module managementModule 'Modules/Management/main.bicep' = {
 
 module networkWatcher 'Modules/NetworkWatcher/main.bicep' = [for azureRegion in azureRegions: {
   name: 'networkWatcherModule-${azureRegion.region}'
-  scope: networkWatcherRG
+  scope: resourceGroup('NetworkWatcherRG')
   params: {
     location: azureRegion.region
   }
