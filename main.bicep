@@ -2,8 +2,8 @@ targetScope = 'subscription'
 
 param companyPrefix string = 'platform'
 
-// @secure()
-// param preSharedKey string
+@secure()
+param preSharedKey string
 
 // @secure()
 // param adminUsername string
@@ -24,8 +24,8 @@ param companyPrefix string = 'platform'
 param hqPrimaryDNSServerIP string = '192.168.1.40'
 param hqSecondaryDNSServerIP string = '192.168.1.41'
 
-// param hqPublicIPAddress string = '185.116.112.220'
-// param hqLocalAddressPrefix string = '192.168.1.0/24'
+param hqPublicIPAddress string = '185.116.112.220'
+param hqLocalAddressPrefix string = '192.168.1.0/24'
 
 // Enter the Azure Regions you wish to use. This will deploy things like a networking hub and active directory domain controller VM into each region. Certain resources like Log Analytics Workspace will be only deployed into a single region - selected from the first element of this array
 param azureRegions array = [
@@ -145,9 +145,9 @@ module hubNetworkingModule 'Modules/Hub-Networking/main.bicep' = [for (azureRegi
   params: {
     location: azureRegion.region
     addressSpace: azureRegion.addressSpace
-    // hqPublicIPAddress: hqPublicIPAddress
-    // hqLocalAddressPrefix: hqLocalAddressPrefix
-    // preSharedKey: preSharedKey
+    hqPublicIPAddress: hqPublicIPAddress
+    hqLocalAddressPrefix: hqLocalAddressPrefix
+    preSharedKey: preSharedKey
   }
 }]
 
