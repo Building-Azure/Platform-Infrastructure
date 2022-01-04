@@ -47,19 +47,20 @@ resource updateManagementSolution 'Microsoft.OperationsManagement/solutions@2015
   }
 }
 
-resource changeTrackingSolution 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
-  name: 'ChangeTracking(${logAnalyticsWorkspace.name})'
-  location: location
-  properties: {
-    workspaceResourceId: logAnalyticsWorkspace.id
-  }
-  plan: {
-    name: 'Updates(${logAnalyticsWorkspace.name})'
-    publisher: 'Microsoft'
-    product: 'OMSGallery/ChangeTracking'
-    promotionCode: ''
-  }
-}
+// This needs to be manually deleted whenever there is a change so I am commenting out
+// resource changeTrackingSolution 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
+//   name: 'ChangeTracking(${logAnalyticsWorkspace.name})'
+//   location: location
+//   properties: {
+//     workspaceResourceId: logAnalyticsWorkspace.id
+//   }
+//   plan: {
+//     name: 'Updates(${logAnalyticsWorkspace.name})'
+//     publisher: 'Microsoft'
+//     product: 'OMSGallery/ChangeTracking'
+//     promotionCode: ''
+//   }
+// }
 
 resource VMInsightsSolution 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
   name: 'VMInsights(${logAnalyticsWorkspace.name})'
