@@ -184,7 +184,8 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2021-07-01' = {
 }
 
 resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}/AzureNetworkWatcherExtension'
+  name: 'AzureNetworkWatcherExtension'
+  parent: windowsVM
   location: location
   properties: {
     publisher: 'Microsoft.Azure.NetworkWatcher'
@@ -196,7 +197,8 @@ resource networkWatcherAgentExtension 'Microsoft.Compute/virtualMachines/extensi
 }
 
 resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}/IaaSAntimalware'
+  name: 'IaaSAntimalware'
+  parent: windowsVM
   location: location
   properties: {
     publisher: 'Microsoft.Azure.Security'
@@ -221,41 +223,49 @@ resource IaaSAntimalwareExtension 'Microsoft.Compute/virtualMachines/extensions@
   }
 }
 
-resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}/AzureMonitorWindowsAgent'
-  location: location
-  properties: {
-    publisher: 'Microsoft.Azure.Monitor'
-    type: 'AzureMonitorWindowsAgent'
-    typeHandlerVersion: '1.0'
-    autoUpgradeMinorVersion: true
-    settings: {}
-  }
-}
+// resource azureMonitorWindowsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+//   name: 'AzureMonitorWindowsAgent'
+//   parent: windowsVM
+//   location: location
+//   properties: {
+//     publisher: 'Microsoft.Azure.Monitor'
+//     type: 'AzureMonitorWindowsAgent'
+//     typeHandlerVersion: '1.0'
+//     autoUpgradeMinorVersion: true
+//     settings: {}
+//   }
+// }
 
-resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-  name: '${domainControllerName}/joindomain'
-  location: location
-  properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'JsonADDomainExtension'
-    typeHandlerVersion: '1.3'
-    autoUpgradeMinorVersion: true
-    settings: {
-      Name: domainFQDN
-      User: '${domainJoinUsername}@${domainFQDN}'
-      Restart: 'true'
-      Options: 3
-      OUPATH: orgUnitPath
-    }
-    protectedSettings: {
-      Password: domainJoinPassword
-    }
-  }
-}
+// resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
+//   name: 'joindomain'
+//   parent: windowsVM
+//   location: location
+//   dependsOn: [
+//     identitySpokePeering
+//   ]
+//   properties: {
+//     publisher: 'Microsoft.Compute'
+//     type: 'JsonADDomainExtension'
+//     typeHandlerVersion: '1.3'
+//     autoUpgradeMinorVersion: true
+//     settings: {
+//       Name: domainFQDN
+//       User: '${domainJoinUsername}@${domainFQDN}'
+//       Restart: 'true'
+//       Options: 3
+//       OUPATH: orgUnitPath
+//     }
+//     protectedSettings: {
+//       Password: domainJoinPassword
+//     }
+//   }
+// }
+
+// The domain join extension fails on initial run because the networking has not completed so is unable to find the domain controllers at HQ
 
 // resource AADLoginExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-//   name: '${domainControllerName}/AADLogin'
+//   name: 'AADLogin'
+//   parent: windowsVM
 //   location: location
 //   properties: {
 //     publisher: 'Microsoft.Azure.ActiveDirectory'
@@ -267,7 +277,8 @@ resource activeDirectoryDomainJoinExtension 'Microsoft.Compute/virtualMachines/e
 // }
 
 // resource logAnalyticsAgentExtension 'Microsoft.Compute/virtualMachines/extensions@2021-07-01' = {
-//   name: '${domainControllerName}/Microsoft.Insights.LogAnalyticsAgent'
+//   name: 'Microsoft.Insights.LogAnalyticsAgent'
+//   parent: windowsVM
 //   location: location
 //   properties: {
 //     publisher: 'Microsoft.EnterpriseCloud.Monitoring'
