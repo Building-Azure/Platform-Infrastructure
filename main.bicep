@@ -60,22 +60,22 @@ param azureRegions array = [
 
 param dnsZones array = [
   'privatelink.azure-automation.net'
-#disable-next-line no-hardcoded-env-urls
+  #disable-next-line no-hardcoded-env-urls
   'privatelink.database.windows.net'
   'privatelink.sql.azuresynapse.net'
   'privatelink.dev.azuresynapse.net'
   'privatelink.azuresynapse.net'
-#disable-next-line no-hardcoded-env-urls
+  #disable-next-line no-hardcoded-env-urls
   'privatelink.blob.core.windows.net'
-#disable-next-line no-hardcoded-env-urls
+  #disable-next-line no-hardcoded-env-urls
   'privatelink.table.core.windows.net'
-#disable-next-line no-hardcoded-env-urls
+  #disable-next-line no-hardcoded-env-urls
   'privatelink.queue.core.windows.net'
-#disable-next-line no-hardcoded-env-urls
+  #disable-next-line no-hardcoded-env-urls
   'privatelink.file.core.windows.net'
-#disable-next-line no-hardcoded-env-urls
+  #disable-next-line no-hardcoded-env-urls
   'privatelink.web.core.windows.net'
-#disable-next-line no-hardcoded-env-urls
+  #disable-next-line no-hardcoded-env-urls
   'privatelink.dfs.core.windows.net'
   'privatelink.documents.azure.com'
   'privatelink.mongo.cosmos.azure.com'
@@ -111,32 +111,31 @@ param dnsZones array = [
   'privatelink.purviewstudio.azure.com'
   'privatelink.digitaltwins.azure.net'
   'privatelink.azurehdinsight.net'
+]
+resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
+  name: '${companyPrefix}-connectivity-${azureRegion.region}'
+  location: azureRegion.region
+}]
 
-] 
- resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
-   name: '${companyPrefix}-connectivity-${azureRegion.region}'
-   location: azureRegion.region
- }]
+resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
+  name: '${companyPrefix}-identity-${azureRegion.region}'
+  location: azureRegion.region
+}]
 
- resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
-   name: '${companyPrefix}-identity-${azureRegion.region}'
-   location: azureRegion.region
- }]
-
- resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-   name: '${companyPrefix}-management'
-   location: azureRegions[0].region
- }
+resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: '${companyPrefix}-management'
+  location: azureRegions[0].region
+}
 
 resource networkWatcherRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${companyPrefix}-networkwatcher'
   location: azureRegions[0].region
- }
+}
 
- resource privateDNSZoneRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+resource privateDNSZoneRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${companyPrefix}-privatednszones'
   location: azureRegions[0].region
- }
+}
 
 module managementModule 'Modules/Management/main.bicep' = {
   name: 'managementModule'
@@ -144,7 +143,7 @@ module managementModule 'Modules/Management/main.bicep' = {
   params: {
     location: azureRegions[0].region
     domainJoinUsername: domainJoinUsername
-    domainJoinPassword:domainJoinPassword
+    domainJoinPassword: domainJoinPassword
   }
 }
 
@@ -205,9 +204,13 @@ module hubPeeringModule 'Modules/Hub-Peering/main.bicep' = [for (azureRegion, i)
 module dnsZoneModule 'Modules/Private-DNS-Zones/main.bicep' = [for (dnsZone, i) in dnsZones: {
   name: 'privateDNSZoneModule-${dnsZone}'
   scope: privateDNSZoneRG
+  
+  //TODO: I should remove this explicit dependency once I sort out the hardcoding inside the dnsZoneModule for Identity
+  dependsOn: [
+    identityModule
+  ]
   params: {
-    azureRegions : azureRegions
+    azureRegions: azureRegions
     dnsZoneName: dnsZone
   }
 }]
-
