@@ -159,7 +159,7 @@ resource windowsVM 'Microsoft.Compute/virtualMachines@2021-07-01' = {
       imageReference: {
         publisher: 'MicrosoftWindowsServer'
         offer: 'WindowsServer'
-        sku: '2022-datacenter-azure-edition'
+        sku: '2019-Datacenter'
         version: 'latest'
       }
       osDisk: {
