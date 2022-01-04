@@ -158,7 +158,7 @@ module identityNetworkingModule 'Modules/Identity-Networking/main.bicep' = [for 
 }]
 
 module hubToSpokePeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [for (azureRegion, i) in azureRegions: {
-  name: 'hubPeeringModule-${azureRegion.region}'
+  name: 'hubToSpokePeeringModule-${azureRegion.region}'
   scope: hubNetworkingRG[i]
   params: {
     useRemoteGateways: false
@@ -169,7 +169,7 @@ module hubToSpokePeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [fo
 }]
 
 module spokeToHubPeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [for (azureRegion, i) in azureRegions: {
-  name: 'hubPeeringModule-${azureRegion.region}'
+  name: 'spokeToHubPeeringModule-${azureRegion.region}'
   scope: identityRG[i]
   params: {
     useRemoteGateways: true
@@ -180,7 +180,7 @@ module spokeToHubPeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [fo
 }]
 
 module identityModule 'Modules/Identity-DomainControllers/main.bicep' = [for (azureRegion, i) in azureRegions: {
-  name: 'identityModule-${azureRegion.region}'
+  name: 'identityDomainControllerModule-${azureRegion.region}'
   scope: identityRG[i]
   dependsOn: [
     spokeToHubPeeringModule
