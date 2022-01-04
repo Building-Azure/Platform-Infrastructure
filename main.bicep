@@ -96,7 +96,7 @@ param azureRegions array = [
 //   'privatelink.digitaltwins.azure.net'
 //   'privatelink.azurehdinsight.net'
 // ]
-resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
+resource hubNetworkingRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
   name: '${companyPrefix}-connectivity-${azureRegion.region}'
   location: azureRegion.region
 }]
@@ -139,9 +139,9 @@ resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azure
 //   }
 // }]
 
-module connectivityModule 'Modules/Connectivity/main.bicep' = [for (azureRegion, i) in azureRegions: {
-  name: 'connectivityModule-${azureRegion.region}'
-  scope: connectivityRG[i]
+module hubNetworkingModule 'Modules/Hub-Networking/main.bicep' = [for (azureRegion, i) in azureRegions: {
+  name: 'hubNetworkingModule-${azureRegion.region}'
+  scope: hubNetworkingRG[i]
   params: {
     location: azureRegion.region
     addressSpace: azureRegion.addressSpace
@@ -164,12 +164,12 @@ module identityNetworkingModule 'Modules/Identity-Networking/main.bicep' = [for 
 
 module hubToSpokePeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [for (azureRegion, i) in azureRegions: {
   name: 'hubPeeringModule-${azureRegion.region}'
-  scope: connectivityRG[i]
+  scope: hubNetworkingRG[i]
   params: {
     useRemoteGateways: false
     remoteVirtualNetworkID: identityNetworkingModule[i].outputs.identityVirtualNetworkId
     remotePeerName: 'Identity'
-    localVirtualNetworkName: connectivityModule[i].outputs.hubVirtualNetworkName
+    localVirtualNetworkName: hubNetworkingModule[i].outputs.hubVirtualNetworkName
   }
 }]
 
@@ -178,7 +178,7 @@ module spokeToHubPeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [fo
   scope: identityRG[i]
   params: {
     useRemoteGateways: false
-    remoteVirtualNetworkID: connectivityModule[i].outputs.hubVirtualNetworkId
+    remoteVirtualNetworkID: hubNetworkingModule[i].outputs.hubVirtualNetworkId
     remotePeerName: 'Hub'
     localVirtualNetworkName: identityNetworkingModule[i].outputs.identityVirtualNetworkName
   }
