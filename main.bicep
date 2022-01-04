@@ -21,8 +21,8 @@ param companyPrefix string = 'platform'
 
 // param orgUnitPath string = 'OU=AZURE,DC=BUILDINGAZURE,DC=CO,DC=UK'
 
-// param hqPrimaryDNSServerIP string = '192.168.1.40'
-// param hqSecondaryDNSServerIP string = '192.168.1.41'
+param hqPrimaryDNSServerIP string = '192.168.1.40'
+param hqSecondaryDNSServerIP string = '192.168.1.41'
 
 // param hqPublicIPAddress string = '185.116.112.220'
 // param hqLocalAddressPrefix string = '192.168.1.0/24'
@@ -101,10 +101,10 @@ resource connectivityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for a
   location: azureRegion.region
 }]
 
-// resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
-//   name: '${companyPrefix}-identity-${azureRegion.region}'
-//   location: azureRegion.region
-// }]
+resource identityRG 'Microsoft.Resources/resourceGroups@2021-04-01' = [for azureRegion in azureRegions: {
+  name: '${companyPrefix}-identity-${azureRegion.region}'
+  location: azureRegion.region
+}]
 
 // resource managementRG 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 //   name: '${companyPrefix}-management'
@@ -148,6 +148,17 @@ module connectivityModule 'Modules/Connectivity/main.bicep' = [for (azureRegion,
     // hqPublicIPAddress: hqPublicIPAddress
     // hqLocalAddressPrefix: hqLocalAddressPrefix
     // preSharedKey: preSharedKey
+  }
+}]
+
+module identityNetworkingModule 'Modules/Identity-Networking/main.bicep' = [for (azureRegion, i) in azureRegions: {
+  name: 'identityNetworkingModule-${azureRegion.region}'
+  scope: identityRG[i]
+  params: {
+    location: azureRegion.region
+    addressSpace: azureRegion.addressSpace
+    hqPrimaryDNSServerIP: hqPrimaryDNSServerIP
+    hqSecondaryDNSServerIP: hqSecondaryDNSServerIP
   }
 }]
 

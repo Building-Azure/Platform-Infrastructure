@@ -129,5 +129,5 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 //   }
 // }
 
-output hubVirtualNetworkName string = virtualNetwork.name
+output hubVirtualNetworkName string = virtualNetwork.id
 // output subnetResourceId string = virtualNetwork::gatewaySubnet.id 
