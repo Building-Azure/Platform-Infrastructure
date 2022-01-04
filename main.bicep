@@ -162,6 +162,28 @@ module identityNetworkingModule 'Modules/Identity-Networking/main.bicep' = [for 
   }
 }]
 
+module hubToSpokePeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [for (azureRegion, i) in azureRegions: {
+  name: 'hubPeeringModule-${azureRegion.region}'
+  scope: connectivityRG[i]
+  params: {
+    useRemoteGateways: false
+    remoteVirtualNetworkID: identityNetworkingModule[i].outputs.identityVirtualNetworkId
+    remotePeerName: 'Identity'
+    localVirtualNetworkName: connectivityModule[i].outputs.hubVirtualNetworkName
+  }
+}]
+
+module spokeToHubPeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [for (azureRegion, i) in azureRegions: {
+  name: 'hubPeeringModule-${azureRegion.region}'
+  scope: identityRG[i]
+  params: {
+    useRemoteGateways: true
+    remoteVirtualNetworkID: connectivityModule[i].outputs.hubVirtualNetworkId
+    remotePeerName: 'Hub'
+    localVirtualNetworkName: identityNetworkingModule[i].outputs.identityVirtualNetworkName
+  }
+}]
+
 // module identityModule 'Modules/Identity/main.bicep' = [for (azureRegion, i) in azureRegions: {
 //   name: 'identityModule-${azureRegion.region}'
 //   scope: identityRG[i]
@@ -183,16 +205,6 @@ module identityNetworkingModule 'Modules/Identity-Networking/main.bicep' = [for 
 //     // domainJoinPassword: domainJoinPassword
 //     // domainJoinUsername: domainJoinUsername
 //     // orgUnitPath: orgUnitPath
-//   }
-// }]
-
-// module hubPeeringModule 'Modules/Hub-Peering/main.bicep' = [for (azureRegion, i) in azureRegions: {
-//   name: 'hubPeeringModule-${azureRegion.region}'
-//   scope: connectivityRG[i]
-//   params: {
-//     identityVirtualNetworkName: identityModule[i].outputs.identityVirtualNetworkName
-//     identityVirtualNetworkResourceGroup: identityRG[i].name
-//     hubVirtualNetworkName: connectivityModule[i].outputs.hubVirtualNetworkName
 //   }
 // }]
 
