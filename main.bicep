@@ -177,7 +177,7 @@ module spokeToHubPeeringModule 'Modules/VirtualNetwork-Peering/main.bicep' = [fo
   name: 'hubPeeringModule-${azureRegion.region}'
   scope: identityRG[i]
   params: {
-    useRemoteGateways: true
+    useRemoteGateways: false
     remoteVirtualNetworkID: connectivityModule[i].outputs.hubVirtualNetworkId
     remotePeerName: 'Hub'
     localVirtualNetworkName: identityNetworkingModule[i].outputs.identityVirtualNetworkName
