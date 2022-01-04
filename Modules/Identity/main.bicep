@@ -302,7 +302,7 @@ resource storageaccount 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   location: location
   kind: 'StorageV2'
   sku: {
-    name: 'Premium_LRS'
+    name: 'Standard_GRS'
   }
   tags: {
     'usage': 'VM and Perf Diagnostics'
