@@ -27,14 +27,14 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
     }
     addressSpace: {
       addressPrefixes: [
-        '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.1.0/24' // Interpolating the first and second octet from the array
+        '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.4.0/22' // Interpolating the first and second octet from the array
       ]
     }
     subnets: [
       {
         name: 'DomainControllerSubnet'
         properties: {
-          addressPrefix: '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.1.0/28'
+          addressPrefix: '${addressSpaceOctets[0]}.${addressSpaceOctets[1]}.4.0/28'
           networkSecurityGroup: {
             id: dcSubnetNetworkSecurityGroup.id
           }
