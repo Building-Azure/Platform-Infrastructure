@@ -22,7 +22,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-05-01' = {
       dnsServers: [
         '${hqPrimaryDNSServerIP}'
         '${hqSecondaryDNSServerIP}'
-        '168.63.129.16' //Azure Provided DNS - without this, Log Analytics won't get data from Agents
+        // '168.63.129.16' //Azure Provided DNS - without this, Log Analytics won't get data from Agents
       ]
     }
     addressSpace: {
