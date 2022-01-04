@@ -26,6 +26,13 @@ resource automationAccount 'Microsoft.Automation/automationAccounts@2021-06-22' 
   }
 }
 
+resource linkedService 'Microsoft.OperationalInsights/workspaces/linkedServices@2020-08-01' = {
+  name: '${logAnalyticsWorkspace.name}/Automation'
+  properties: {
+    resourceId: automationAccount.id
+  }
+}
+
 resource updateManagementSolution 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
   name: 'Updates(${logAnalyticsWorkspace.name})'
   location: location
